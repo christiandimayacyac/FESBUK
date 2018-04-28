@@ -1,0 +1,150 @@
+.form-container {
+    width: 40rem;
+}
+
+.form-title {
+    font-size: 3rem;
+    color: #fff;
+    width: 100%;
+    background-color: #84d2f6;
+    margin: 0;
+    padding: 1rem 3rem;
+    text-align: center;
+}
+
+
+.register-form,
+.login-form {
+    
+    padding: 3rem;
+    background-color: $color5;
+    position: relative;
+    // padding: 2rem;
+
+    &__errors {
+        color: $color-white;
+        background-color: rgba(250, 77, 77, 0.8);
+        padding: 1rem 4rem 1.5rem 2rem;
+        border-radius: 3px;
+    }
+
+    &__title {
+
+    }
+
+    &__list {
+        margin-left: 2.5rem;
+    }
+
+    &__item {
+
+    }
+
+    &__label {
+        display: block;
+        color: $color-grey-darker;
+        font-size: 1.2rem;
+        font-weight: 700;
+        opacity: 0;
+        visibility: hidden;
+        transform: translate(1.3rem, -4.8rem); //initial position
+        transition: all .3s ease-out;
+    }
+    
+    &__input {
+        display: block;
+        font-size: 1.4rem;
+        width: 100%;
+        margin-bottom: 1rem;
+        padding: .9rem 1rem;
+        border-radius: 3px;
+        // border: 1px solid rgba($color-grey-dark, 0.4);
+        border: none;
+        border-bottom: 3px solid transparent;
+        
+        &::-webkit-input-placeholder {
+            color: $color-grey-dark; 
+        }
+    }
+
+    &__input:focus,
+    &__input:active {
+        outline: none;
+        border-bottom: 3px solid $color3;
+
+        &:invalid {
+            border-bottom: 3px solid red;
+        }
+    }
+
+    &__input:focus + &__label {
+        opacity: 1;
+        visibility: visible;
+        z-index: -100;
+        transform: translate(1.2rem, -0.8rem); 
+    }
+
+    &__input:placeholder-shown + &__label {
+        opacity: 0;
+        visibility: hidden;
+        transform: translate(1.3rem, -4.8rem);
+    }
+
+    &__text {
+        display: block;
+        font-size: 1.2rem;
+        margin-bottom: 2rem;
+
+        &--link {
+            @include baseLink;
+            font-size: 1.3rem;
+        }
+    }
+
+    &__chkbox {
+        margin-bottom: 2rem;
+    }
+
+    &__chkbox + &__label {
+        opacity: 1;
+        visibility: visible;
+        transform: translate(2.5rem, -4rem);
+        font-size: $default-font-size;
+        color: #666;
+    }
+
+    &__btn {
+        color: $color-white;
+        background-color: $color3;
+        border: 1px solid $color-grey-darker;
+        border-radius: 3px;
+        // border: 1px solid rgba($color-grey-dark, 0.4);
+        border: none;
+        padding: 1.5rem 2.5rem;
+        // font-size: 1.5rem;
+        letter-spacing: .3rem;
+        font-weight: 700;
+        width: 100%;
+        text-transform: uppercase;
+        box-shadow: 0 1rem 4rem rgba($color-grey-darker, 0.4);
+    }
+
+}
+
+/* Change Autocomplete styles in Chrome*/
+// input:-webkit-autofill,
+// input:-webkit-autofill:hover, 
+// input:-webkit-autofill:focus
+// input:-webkit-autofill, 
+// textarea:-webkit-autofill,
+// textarea:-webkit-autofill:hover
+// textarea:-webkit-autofill:focus,
+// select:-webkit-autofill,
+// select:-webkit-autofill:hover,
+// select:-webkit-autofill:focus {
+//   border: 1px solid green;
+//   -webkit-text-fill-color: green;
+//   -webkit-box-shadow: 0 0 0px 1000px #000 inset;
+//   box-shadow: 0 0 0px 1000px #000 inset;
+//   transition: background-color 5000s ease-in-out 0s;
+// }

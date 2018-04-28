@@ -1,0 +1,57 @@
+.register-form,
+.login-form {
+    position: relative;
+    padding: 2rem;
+
+    &__errors {
+        color: $color-white;
+        background-color: rgba(250, 77, 77, 0.8);
+        padding: 2rem;
+        border-radius: 3px;
+    }
+
+    &__label {
+        display: block;
+        color: $color-grey-darkest;
+        font-size: 1.5rem;
+        font-weight: 700;
+    }
+    
+    &__input {
+        display: block;
+        font-size: inherit;
+        width: 100%;
+        margin-bottom: 1.5rem;
+        padding: 1rem 1.2rem;
+        border-radius: 3px;
+        border: 1px solid rgba($color-grey-dark, 0.4);
+
+        &::-webkit-input-placeholder {
+            color: $color-grey-dark;
+        }
+    }
+
+    &__text {
+        display: block;
+        font-size: 1.2rem;
+        margin-bottom: 2rem;
+
+        &--link {
+            @include baseLink;
+            font-size: 1.3rem;
+        }
+    }
+
+    &__btn {
+        color: $color-grey-darkest;
+        background-color: $color-white;
+        border: 1px solid $color-grey-darker;
+        border-radius: 3px;
+        border: 1px solid rgba($color-grey-dark, 0.4);
+        padding: 1rem 2.5rem;
+        margin-bottom: 1rem;
+        font-weight: 700;
+        text-transform: uppercase;
+    }
+
+}

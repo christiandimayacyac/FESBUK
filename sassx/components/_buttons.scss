@@ -1,0 +1,110 @@
+.btn {
+    position: relative;
+    cursor: pointer;
+    display: inline-block;
+    color: $color-white;
+    font-size: $default-font-size;
+    font-family: inherit;
+    text-transform: uppercase; 
+    text-decoration: none;
+    padding: 1.5rem 3rem;
+    border: none;
+    border-radius: 10rem;
+    font-weight: 700;
+    box-shadow:0 1rem 2rem rgba($color-black,.2);
+    transition: all .2s;
+
+    &:hover {
+        transform: translateY(-.3rem);
+        box-shadow:0 .5rem 1rem rgba($color-black,.2);
+    }
+    
+    &:active {
+        transform: translateY(-.1rem);
+        box-shadow:0 .2rem .5rem rgba($color-black,.3);
+    }
+    
+    &--white {
+        color: #4c4c4c;
+        background-color: $color-white;
+
+        &::after {
+            background-color: $color-white;
+        }
+    }
+
+    &--green {
+        color: $color-white;
+        background-color: $color-primary-dark;
+
+        &::after {
+            background-color: $color-primary-dark;
+        }
+    }
+    
+    &:focus {
+        outline: none;
+    }
+
+    &--flash-fx {
+        // animation: moveUp .6s ease-out .4s;
+        // animation-fill-mode: backwards;
+    }
+    
+    &--flash-fx::after {
+        position: absolute;
+        display: inline-block;
+        content: "";
+        top: 0;
+        left: 0;
+        // background-color: $color-white;
+        z-index: -1;
+        width:100%;
+        height: 100%;
+        border-radius: 10rem;
+        transition: all .1s;
+    
+    }
+    
+    &--flash-fx:hover::after {
+        opacity: 0;
+        transform: translateY(-.3rem);
+        transform: scaleX(1.4) scaleY(2);
+    }
+
+    &--moveup {
+        animation: moveUp .6s ease-out .4s;
+        animation-fill-mode: backwards;
+    }
+
+}
+
+.btn-text {
+    &,
+    &:link,
+    &:visited {
+        display: inline-block;
+        color: $color-primary;
+        text-decoration: none;
+        font-size: $default-font-size;
+        font-weight: 700;
+        border: none;
+        padding: .4rem .8rem;
+        border-bottom: 1px solid $color-primary;
+        transition: all .2s;
+    }
+
+    &:hover {
+        color: $color-white;
+        background-color: $color-primary;
+        transform: translateY(-.2rem);
+        box-shadow: 0 1rem 2rem rgba($color-black, .2);
+    }
+
+    &:active {
+        transform: translateY(.2rem);
+        box-shadow: 0 .5rem 1.2rem rgba($color-black, .3);
+    }
+
+
+}

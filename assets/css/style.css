@@ -1,0 +1,194 @@
+/*
+
+0 - 600PX       :Phone
+601 - 900       :Tablet Portrait
+901 - 1200px    :Tablet Landscape
+1201 - 1800     :Current Normal stylings in use
+1801+           :Big Desktop
+
+$breakpoint  values
+- phone
+- tab-port
+- tab-land
+- big-desktop
+
+ORDER OF RESPONSIVE MANIPULATIONS:
+BASE + TYPOGRAPHY + GENERAL LAYOUT > GENERAL LAYOUT + GRID >PAGE LAYOUT > COMPPONENTS
+
+*/
+/* Coolors Exported Palette - coolors.co/133c55-386fa4-59a5d8-84d2f6-91e5f6 */
+/* RGB */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit; }
+
+html {
+  font-size: 62.5%; }
+  @media (max-width: 75em) {
+    html {
+      font-size: 56.25%; } }
+  @media (max-width: 56.25em) {
+    html {
+      font-size: 50%; } }
+  @media (max-width: 37.5em) {
+    html {
+      font-size: 50%; } }
+  @media (min-width: 112.5em) {
+    html {
+      font-size: 75%; } }
+
+body {
+  background-color: #fff;
+  box-sizing: border-box;
+  padding: 3rem;
+  font-size: 1.6rem; }
+
+.container {
+  border-radius: 3px;
+  margin: 0 5%; }
+
+body {
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  line-height: 1.7;
+  color: #ccc; }
+
+.heading-1 {
+  color: #0f0f0f; }
+
+.u-center-text {
+  text-align: center; }
+
+@media (max-width: 56.25em) {
+  .u-center--res {
+    text-align: center;
+    display: block; } }
+
+.u-margin-bottom-s {
+  margin-bottom: 1.5rem; }
+
+.u-margin-bottom-m {
+  margin-bottom: 4rem; }
+
+.u-margin-bottom-l {
+  margin-bottom: 8rem; }
+
+.form-container {
+  width: 40rem; }
+
+.form-title {
+  font-size: 3rem;
+  color: #fff;
+  width: 100%;
+  background-color: #84d2f6;
+  margin: 0;
+  padding: 1rem 3rem;
+  text-align: center; }
+
+.register-form,
+.login-form {
+  padding: 3rem;
+  background-color: #91e5f6;
+  position: relative; }
+  .register-form__errors,
+  .login-form__errors {
+    color: #fff;
+    background-color: rgba(250, 77, 77, 0.8);
+    padding: 1rem 4rem 1.5rem 2rem;
+    border-radius: 3px; }
+  .register-form__list,
+  .login-form__list {
+    margin-left: 2.5rem; }
+  .register-form__label,
+  .login-form__label {
+    display: block;
+    color: #666;
+    font-size: 1.2rem;
+    font-weight: 700;
+    opacity: 0;
+    visibility: hidden;
+    transform: translate(1.3rem, -4.8rem);
+    transition: all .3s ease-out; }
+  .register-form__input,
+  .login-form__input {
+    display: block;
+    font-size: 1.4rem;
+    width: 100%;
+    margin-bottom: 1rem;
+    padding: .9rem 1rem;
+    border-radius: 3px;
+    border: none;
+    border-bottom: 3px solid transparent; }
+    .register-form__input::-webkit-input-placeholder,
+    .login-form__input::-webkit-input-placeholder {
+      color: #ccc; }
+  .register-form__input:focus, .register-form__input:active,
+  .login-form__input:focus,
+  .login-form__input:active {
+    outline: none;
+    border-bottom: 3px solid #59a5d8; }
+    .register-form__input:focus:invalid, .register-form__input:active:invalid,
+    .login-form__input:focus:invalid,
+    .login-form__input:active:invalid {
+      border-bottom: 3px solid red; }
+  .register-form__input:focus + .register-form__label,
+  .login-form__input:focus + .register-form__label, .register-form__input:focus +
+  .login-form__label,
+  .login-form__input:focus +
+  .login-form__label {
+    opacity: 1;
+    visibility: visible;
+    z-index: -100;
+    transform: translate(1.2rem, -0.8rem); }
+  .register-form__input:placeholder-shown + .register-form__label,
+  .login-form__input:placeholder-shown + .register-form__label, .register-form__input:placeholder-shown +
+  .login-form__label,
+  .login-form__input:placeholder-shown +
+  .login-form__label {
+    opacity: 0;
+    visibility: hidden;
+    transform: translate(1.3rem, -4.8rem); }
+  .register-form__text,
+  .login-form__text {
+    display: block;
+    font-size: 1.2rem;
+    margin-bottom: 2rem; }
+    .register-form__text--link,
+    .login-form__text--link {
+      text-decoration: none;
+      font-size: 1.3rem; }
+      .register-form__text--link:link, .register-form__text--link:visited,
+      .login-form__text--link:link,
+      .login-form__text--link:visited {
+        color: #386fa4; }
+  .register-form__chkbox,
+  .login-form__chkbox {
+    margin-bottom: 2rem; }
+  .register-form__chkbox + .register-form__label,
+  .login-form__chkbox + .register-form__label, .register-form__chkbox +
+  .login-form__label,
+  .login-form__chkbox +
+  .login-form__label {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(2.5rem, -4rem);
+    font-size: 1.6rem;
+    color: #666; }
+  .register-form__btn,
+  .login-form__btn {
+    color: #fff;
+    background-color: #59a5d8;
+    border: 1px solid #666;
+    border-radius: 3px;
+    border: none;
+    padding: 1.5rem 2.5rem;
+    letter-spacing: .3rem;
+    font-weight: 700;
+    width: 100%;
+    text-transform: uppercase;
+    box-shadow: 0 1rem 4rem rgba(102, 102, 102, 0.4); }
+
+/* Change Autocomplete styles in Chrome*/
