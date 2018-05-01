@@ -10,12 +10,14 @@
         protected static $db_user_name = "ziemdiadmin";
         protected static $db_user_password = "ziemdiadmin";
 
-        private function __construnct() {
+        private function __construct() {
             
             try {
                 self::$con = new PDO(self::$dsn, self::$db_user_name, self::$db_user_password);
                 self::$con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 self::$con->setAttribute(PDO::ATTR_PERSISTENT, false);
+                //test  connection
+                // var_dump(self::$con);
             }
             catch(PDO $ex) {
                 echo "Error connecting to the Database. Please contact the Site Admin.";

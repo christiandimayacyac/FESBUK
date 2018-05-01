@@ -1,5 +1,11 @@
 .form-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     width: 40rem;
+    height: 100%;
+    margin: 0 auto;
+    padding: 3rem 0;
 }
 
 .form-title {
@@ -8,37 +14,40 @@
     width: 100%;
     background-color: #84d2f6;
     margin: 0;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
     padding: 1rem 3rem;
     text-align: center;
+    z-index: 100;
 }
 
 
-.register-form,
-.login-form {
-    
-    padding: 3rem;
-    background-color: $color5;
-    position: relative;
-    // padding: 2rem;
-
-    &__errors {
-        color: $color-white;
-        background-color: rgba(250, 77, 77, 0.8);
-        padding: 1rem 4rem 1.5rem 2rem;
-        border-radius: 3px;
-    }
+.form-errors {
+    color: $color-white;
+    font-size: 1.3rem;
+    background-color: rgba(250, 77, 77, 0.9);
+    padding: 1rem 4rem 1.5rem 2rem;
+    z-index: 100;
 
     &__title {
-
+        font-size: 1.6rem;
     }
 
     &__list {
         margin-left: 2.5rem;
     }
+}
 
-    &__item {
-
-    }
+.register-form,
+.login-form {
+    width: 100%;
+    padding: 3rem;
+    background-color: $color5;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+    position: relative;
+    box-shadow: 0 1rem 1rem rgba(0,0,0,0.4);
+    z-index: 100;
 
     &__label {
         display: block;
@@ -102,14 +111,15 @@
     }
 
     &__chkbox {
-        margin-bottom: 2rem;
+        // margin-bottom: 2rem;
     }
 
     &__chkbox + &__label {
         opacity: 1;
         visibility: visible;
-        transform: translate(2.5rem, -4rem);
-        font-size: $default-font-size;
+        transform: translate(2rem, -2.5rem);
+        font-size: 1.3rem;
+        font-weight: 400;
         color: #666;
     }
 
@@ -127,7 +137,30 @@
         width: 100%;
         text-transform: uppercase;
         box-shadow: 0 1rem 4rem rgba($color-grey-darker, 0.4);
+        margin-bottom: 2.5rem;
+
     }
+
+    &__footer {
+        display: block;
+        text-align: center;
+        color: $color-grey-darker;
+        font-size: 1.3rem;
+        font-weight: 400;
+    }
+
+    &__switch-btn {
+        @include baseLink;
+        font-weight: 700;
+
+        &:hover {
+            color: $color-white;
+        }
+    }
+
+
+
+
 
 }
 

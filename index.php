@@ -2,6 +2,8 @@
     // define the __CONFIG__ to allow the config.php file
     define('__CONFIG__', true);
     require_once "inc/config.php";
+
+    Page::ForceLogout();
 ?>
 
 <!DOCTYPE html>
@@ -13,6 +15,8 @@
     <title>Document</title>
 </head>
 <body>
-    Fesbuk
+    Welcome to Fesbuk
+    <!-- <?php var_dump($_SESSION); ?>   -->
+    <a href="logout.php">Logout</a>
 </body>
 </html>

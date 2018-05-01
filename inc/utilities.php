@@ -1,131 +1,89 @@
 <?php 
+	// if __CONFIG__ is not defined, do not load this file
+    if( !defined('__CONFIG__') ) {
+        exit('Config File is not defined.');
+    }
+	require_once "config.php";
+	
 
-    //VALIDATION///////////////////////////////////////////////////////////////////////
-	function verifyPassword($pass1, $pass2){
-		$pass1 = trim($pass1);
-		$pass2 = trim($pass2);
-		if ( $pass1 === $pass2){
-			return true;
-		}
+	//MISC FUNCTIONS///////////////////////////////////////////////////////////
+	
+	function redirectTo($page){
+		header("location:" . $page . ".php");
+	}
+
+
+	function setUserCookie($user_name) {
+		//encrypt cookie value
+		$encrypted_cookie_value = getBase64EncodedValue(Constant::$userNameEncKey, $user_name);
+
+		//set a cookie named: "rememberFesbuk" and will expire after 30days
+		setcookie("rememberFesbuk", $encrypted_cookie_value, time()+60*60*24*100,"/");
+	}
+
+
+	//requires encryption key and string to encrypt
+	//encrypts using base64_encode
+	function getBase64EncodedValue($key, $value){
+		$encoded_data = "";
+			
+			if (!empty($key) && !empty($value) ){
+				$encoded_data = base64_encode($key . $value);
+			}
+		
+		return $encoded_data;
 	}
 	
-	
-	function checkEmptyFields($formFields){
-		$form_Errors = array();
-		
-		foreach($formFields as $formField){
-			if( !isset($_POST[$formField]) || $_POST[$formField] == NULL ){
-					$form_Errors[] = $formField . " is a required field.";
+	//requires encryption key and encrypted string
+	//decrypts using base64_decode and explode() 
+	//last parameter is the raw data
+	function getBase64DecodedValue($key, $value){
+		$decodedData = "";
+			try{
+				if (!empty($key) && !empty($value) ){
+					$decoded_data = base64_decode($value);
+					$decoded_Data = explode($key,$decoded_data);
+					if( isset($decoded_Data[1]) ){
+						$decodedData = $decoded_Data[1];
+					}
 				}
 			}
-		return $form_Errors;
-	}
-	
-	
-	function validateEmail($email){
-		$form_Errors = array();
-		
-		if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-			$emailErr = "Invalid email format"; 
-		}
-		return $form_Errors;
-	}
-	
-	
-	function checkDuplicate($db, $tableName, $colName, $value){
-
-		try{
-			$sqlQuery = "SELECT * FROM " . $tableName . " WHERE " . $colName . " =:value";
-			
-			$statement = $db->prepare($sqlQuery);
-			
-			
-			$statement->execute(array(':value'=> $value));
-			
-			if ( $statement->rowCount() >= 1 ){
-				return true;
+			catch(Exception $ex){
+				
 			}
-			
-		}
-		catch(PDOException $ex){
-			echo $ex->getMessage();
-		}
 		
-		return false;
+		return $decodedData;
 	}
-	
-	function checkDuplicate2($db, $tableName, $colName, $value1, $value2){
 
-		try{
-			$sqlQuery = "SELECT * FROM " . $tableName . " WHERE " . $colName . " =:value AND user_id = " . $value2 ;
-			
-			$statement = $db->prepare($sqlQuery);
-			
-			
-			
-			$statement->execute(array(':value'=> $value1));
-			
-			if ( $statement->rowCount() >= 1 ){
-				return true;
-			}
-			
-		}
-		catch(PDOException $ex){
-			echo $ex->getMessage();
-		}
-		
-		return false;
-	}
-	
-	function checkMinLength($formsWithLengths){
-		$form_errors = array();
-		
-		foreach($formsWithLengths as $formWithLength => $formMinValue){
-			if( strlen(trim($_POST[$formWithLength])) <= $formMinValue ){
-				$form_errors[] =  $formWithLength . " must be at least " . $formMinValue . " characters";
-			}
-		}
-		return $form_errors;
-	}
-	
-	function compareValues($valuesArray){
-		$form_errors = array();
-		
-		if ($valuesArray[0] != $valuesArray[1]){
-			$form_errors[] = 'Passwords do not match';
-		}
-		
-		return $form_errors;
-    }
-
-    function isCookieValid($db){
+	//checks if the save cookie named: "rememberFesbuk" is valid
+    function isCookieValid(){
 		
 		$isValid = false;
 		
-		if ( isset($_COOKIE['rememberMeCookie'])) {
-			$decryptedCookie = base64_decode($_COOKIE['rememberMeCookie']);
-			$user_ID = explode("secretkey", $decryptedCookie);
-			$userID = $user_ID[1];
+		if ( isset($_COOKIE['rememberFesbuk'])) {
+			$decryptedCookie = base64_decode($_COOKIE['rememberFesbuk']);
+			$user_name = explode(Constant::$userNameEncKey, $decryptedCookie);
+			$user_name = $user_name[1];
 			
 			try{
-				$sqlQuery = "SELECT * FROM users WHERE user_id = :userid";
+				$sqlQuery = "SELECT * FROM users WHERE user_name = :user_name";
 				
 				$stmtQuery = $db->prepare($sqlQuery);
 				
-				$stmtQuery->execute(array(':userid'=>$userID));
+				$stmtQuery->execute(array(':user_name'=>$user_name));
 				
 				//if match record is found, create session variables
 				if ( $rs = $stmtQuery->fetch() ){
 					$id = $rs['user_id'];
-					$username = $rs['username'];
+					$username = $rs['user_name'];
 					
-					$_SESSION['id'] = $id;
+					$_SESSION['user_id'] = $id;
 					$_SESSION['username'] = $username;
 					$isValid = true;
 				}
 				else{
 					$isValid = false;
-					signOut();
+					redirectTo('logout');
 				}
 			}
 			catch(PDOException $ex){
@@ -183,11 +141,7 @@
 		return $isValidFingerprint;
 	}
 
-    //MISC FUNCTIONS///////////////////////////////////////////////////////////
-	
-	function redirectTo($page){
-		header("location:" . $page . ".php");
-	}
+    
 	
 	function getHashValue($raw){
 		return password_hash($raw, PASSWORD_DEFAULT);
@@ -205,33 +159,7 @@
 		return $encoded_data;
 	}
 	
-	function getBase64EncodedValue($key, $value){
-		$encoded_data = "";
-			
-			if (!empty($key) && !empty($value) ){
-				$encoded_data = base64_encode($key . $value);
-			}
-		
-		return $encoded_data;
-	}
 	
-	function getBase64DecodedValue($key, $value){
-		$decodedData = "";
-			try{
-				if (!empty($key) && !empty($value) ){
-					$decoded_data = base64_decode($value);
-					$decoded_Data = explode($key,$decoded_data);
-					if( isset($decoded_Data[1]) ){
-						$decodedData = $decoded_Data[1];
-					}
-				}
-			}
-			catch(Exception $ex){
-				
-			}
-		
-		return $decodedData;
-	}
 	
 	function generateToken(){
 		$randomToken = getBase64EncodedValue("usertoken", openssl_random_pseudo_bytes(32));	
@@ -252,29 +180,6 @@
 		
 		return $decodedValue;
     }
-
-    function getRecord($db, $tableName, $colName, $value){
-		
-		$data = array();
-		
-		try{
-			$sqlQuery = "SELECT * FROM " . $tableName . " WHERE user_id = " . $value ;
-			
-			$statement = $db->prepare($sqlQuery);
-			
-			$statement->execute(array(':value'=> $value));
-			
-			while( $rs = $statement->fetch() ){
-				$data = $rs;
-			}
-			
-		}
-		catch(PDOException $ex){
-			echo $ex->getMessage();
-		}
-		
-		return $data;
-	}
     
     
 
