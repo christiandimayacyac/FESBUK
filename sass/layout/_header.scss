@@ -1,0 +1,136 @@
+.header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: 6rem;
+    width: 100%;
+    background-color: $color2;
+    box-shadow: 0 .5rem 2rem rgba($color-black, 0.2);
+    
+    &__logo {
+        cursor: pointer;
+        color: $color-white;
+        height: 6rem;
+        width: 12rem;
+        margin-left: 2rem;
+    }
+}
+
+.search {
+    position: relative;
+    height: 3rem;
+    flex: 0 0 30%;
+    display: flex;
+    justify-content: center;
+
+    &__input {
+        display: inline-block;
+        height: 100%;
+        width: 60%;
+        padding: .5rem 1.5rem;
+        border: none;
+        border-radius: 100px;
+        font-family: inherit;
+        font-size: 1.4rem;
+        transition: width .4s;
+
+        &:active,
+        &:focus {
+            outline: none;
+            width: 100%;
+            color: $color-grey-darkest;
+            letter-spacing: .08 rem;
+        }
+        &::-webkit-input-placeholder {
+            color: $color-grey-dark;
+        }
+
+    }
+
+    &__btn {
+        cursor: pointer;
+        height: 100%;
+        width: 4rem;
+        border: none;
+        border-top-right-radius: 100px;
+        border-bottom-right-radius: 100px;
+        transform: translateX(-3rem);
+
+        &:active,
+        &:focus, 
+        &:hover, {
+            outline: none;
+        }
+
+        &:hover {
+            background-color: $color3;
+        }
+
+        &:hover &__icon {
+            color: $color-white;
+        }
+    }
+
+    &__icon {
+        left: 0;
+        height: 100%;
+        width: 4rem;
+        padding: .5rem;
+
+        &:hover {
+            color: $color-white;
+            fill: $color-white;
+        }
+    }
+}
+
+.user-nav {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: stretch;
+    height: 100%;
+
+    & > * {
+        cursor: pointer;
+        width: 5.0rem;
+        height: 100%;
+        padding: 0 1.2rem;
+        align-self: center;
+        // border: 1px solid yellow;
+        transition: all .4s;
+
+        &:hover {
+            background-color: $color3;
+        }
+    }
+
+    &__icon-box:hover &__icon {
+        fill: $color-white;
+    }
+
+    &__username {
+        color: $color-white;
+        width: auto;
+        display: flex;
+        align-items: center;
+    }
+
+    &__icon {
+        width: 100%;
+        height: 100%;
+    }
+
+    &__logout {
+        color: $color-white;
+        cursor: pointer;
+        border: none;
+        width: auto;
+        height: 100%;
+        line-height: 2rem;
+        margin-right: 3rem;    
+        background-color: rgb(168, 0, 0);
+    }
+}
+

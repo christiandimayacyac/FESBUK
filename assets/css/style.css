@@ -27,21 +27,9 @@ BASE + TYPOGRAPHY + GENERAL LAYOUT > GENERAL LAYOUT + GRID >PAGE LAYOUT > COMPPO
 
 html {
   font-size: 62.5%; }
-  @media (max-width: 75em) {
-    html {
-      font-size: 56.25%; } }
-  @media (max-width: 56.25em) {
-    html {
-      font-size: 50%; } }
-  @media (max-width: 37.5em) {
-    html {
-      font-size: 50%; } }
-  @media (min-width: 112.5em) {
-    html {
-      font-size: 75%; } }
 
 body {
-  background-color: #fff;
+  background-color: #ccc;
   box-sizing: border-box;
   font-size: 1.6rem; }
 
@@ -52,11 +40,16 @@ body {
 body {
   font-family: "Lato", sans-serif;
   font-weight: 400;
-  line-height: 1.7;
-  color: #ccc; }
+  line-height: 1.7; }
 
 .heading-1 {
   color: #0f0f0f; }
+
+a,
+a:link {
+  display: block;
+  text-decoration: none;
+  color: #386fa4; }
 
 .u-center-text {
   text-align: center; }
@@ -227,6 +220,215 @@ body {
       color: #fff; }
 
 /* Change Autocomplete styles in Chrome*/
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  height: 6rem;
+  width: 100%;
+  background-color: #386fa4;
+  box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.2); }
+  .header__logo {
+    cursor: pointer;
+    color: #fff;
+    height: 6rem;
+    width: 12rem;
+    margin-left: 2rem; }
+
+.search {
+  position: relative;
+  height: 3rem;
+  flex: 0 0 30%;
+  display: flex;
+  justify-content: center; }
+  .search__input {
+    display: inline-block;
+    height: 100%;
+    width: 60%;
+    padding: .5rem 1.5rem;
+    border: none;
+    border-radius: 100px;
+    font-family: inherit;
+    font-size: 1.4rem;
+    transition: width .4s; }
+    .search__input:active, .search__input:focus {
+      outline: none;
+      width: 100%;
+      color: #333;
+      letter-spacing: .08 rem; }
+    .search__input::-webkit-input-placeholder {
+      color: #ccc; }
+  .search__btn {
+    cursor: pointer;
+    height: 100%;
+    width: 4rem;
+    border: none;
+    border-top-right-radius: 100px;
+    border-bottom-right-radius: 100px;
+    transform: translateX(-3rem); }
+    .search__btn:active, .search__btn:focus, .search__btn:hover {
+      outline: none; }
+    .search__btn:hover {
+      background-color: #59a5d8; }
+    .search__btn:hover .search__btn__icon {
+      color: #fff; }
+  .search__icon {
+    left: 0;
+    height: 100%;
+    width: 4rem;
+    padding: .5rem; }
+    .search__icon:hover {
+      color: #fff;
+      fill: #fff; }
+
+.user-nav {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: stretch;
+  height: 100%; }
+  .user-nav > * {
+    cursor: pointer;
+    width: 5.0rem;
+    height: 100%;
+    padding: 0 1.2rem;
+    align-self: center;
+    transition: all .4s; }
+    .user-nav > *:hover {
+      background-color: #59a5d8; }
+  .user-nav__icon-box:hover .user-nav__icon {
+    fill: #fff; }
+  .user-nav__username {
+    color: #fff;
+    width: auto;
+    display: flex;
+    align-items: center; }
+  .user-nav__icon {
+    width: 100%;
+    height: 100%; }
+  .user-nav__logout {
+    color: #fff;
+    cursor: pointer;
+    border: none;
+    width: auto;
+    height: 100%;
+    line-height: 2rem;
+    margin-right: 3rem;
+    background-color: #a80000; }
+
+.row {
+  max-width: 96rem;
+  margin: 0 auto; }
+  @media (max-width: 56.25em) {
+    .row {
+      padding: 0 2rem;
+      margin: 0; } }
+  .row:not(:last-child) {
+    margin-bottom: 8em; }
+    @media (max-width: 56.25em) {
+      .row:not(:last-child) {
+        margin-bottom: 6rem; } }
+  .row::after {
+    content: "";
+    display: table;
+    clear: both; }
+  .row [class^="col-"] {
+    float: left; }
+    .row [class^="col-"]:not(:last-child) {
+      margin-right: 6rem; }
+      @media (max-width: 56.25em) {
+        .row [class^="col-"]:not(:last-child) {
+          margin-right: 0;
+          margin-bottom: 6rem; } }
+    @media (max-width: 56.25em) {
+      .row [class^="col-"] {
+        width: 100% !important; } }
+  .row .col-1-of-2 {
+    width: calc( (100% - 6rem) / 2); }
+  .row .col-1-of-3 {
+    width: calc( (100% - (2 * 6rem)) / 3); }
+  .row .col-2-of-3 {
+    width: calc( 2 * ((100% - (2 * 6rem)) / 3) + 6rem); }
+  .row .col-1-of-4 {
+    width: calc( (100% - (3 * 6rem)) / 4); }
+  .row .col-2-of-4 {
+    width: calc( 2 * ((100% - (3 * 6rem)) / 4) + 6rem); }
+  .row .col-3-of-4 {
+    width: calc( 3 * ((100% - (3 * 6rem)) / 4)  + (2 * 6rem)); }
+
+.content {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: stretch;
+  color: #333;
+  width: 100%;
+  min-height: calc(100vh - 8rem); }
+
+.sidebar {
+  flex: 0 0 250px;
+  height: 100%;
+  margin: 2rem 1rem 1rem 1rem; }
+  .sidebar-links {
+    font-size: 1.4rem;
+    padding: 1.5rem;
+    border-radius: 3px;
+    background-color: #fff; }
+  .sidebar__title {
+    color: #fff;
+    padding: .5rem 1rem;
+    border-radius: 3px;
+    background-color: #386fa4; }
+  .sidebar__list {
+    list-style: none;
+    margin: 1.5rem .2rem 1rem 1rem; }
+
+.user-info {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  height: 14rem;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  border-radius: 3px;
+  background-color: #fff; }
+  .user-info__pix-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    height: 100%;
+    border-radius: 3px;
+    background-color: #133c55; }
+  .user-info__pix {
+    width: 100%;
+    height: auto; }
+
+.user-details {
+  font-size: 1.25rem;
+  line-height: 2rem;
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-items: flex-start;
+  padding: 0 1rem; }
+  .user-details__first-name {
+    color: #133c55;
+    font-size: 1.5rem;
+    font-weight: 700; }
+  .user-details__last-name {
+    font-weight: 700; }
+
+.main {
+  flex: 1 0 500px;
+  margin: 2rem 1rem 1rem 1rem;
+  padding: 1rem;
+  background-color: #fff;
+  border-radius: 3px; }
+
 .main-content {
   display: flex;
   flex-direction: column;
@@ -245,6 +447,7 @@ body {
     top: 0;
     left: 0;
     width: 100%;
+    height: 100%;
     background-color: rgba(0, 0, 0, 0.1); }
   .main-content__bg {
     display: block;

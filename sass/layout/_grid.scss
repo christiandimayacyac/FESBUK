@@ -3,7 +3,7 @@
     margin: 0 auto;
 
     @include respond(tab-port) {
-        max-width: $grid-width-tab;
+        // max-width: $grid-width-tab;
         padding: 0 2rem;
         margin: 0;
     }

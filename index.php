@@ -1,22 +1,38 @@
-<?php
-    // define the __CONFIG__ to allow the config.php file
-    define('__CONFIG__', true);
-    require_once "inc/config.php";
+<?php include "inc/header.php"; ?>
+<div class="container">
+    <div class="row">
+        <div class="content">
+            <div class="sidebar">
+                <div class="user-info">
+                    <div class="user-info__pix-box">
+                        <img src="assets/img/base/default.png" alt="profile picture" class="user-info__pix">
+                    </div>
+                    <div class="user-details">
+                        <div class="user-details__fullname">
+                            <span class="user-details__first-name">Christian</span>
+                            <span class="user-details__last-name">Dimayacyac</span>
+                        </div>
+                        <span class="user-details__num-post">Posts: 12</span>
+                        <span class="user-details__likes">Likes: 4</span>
+                    </div>
+                </div>
+                <div class="sidebar-links">
+                    <h3 class="sidebar__title">Popular</h3>
+                    <ul class="sidebar__list">
+                        <li class="sidebar__link"><a href="#">NBA</li>
+                        <li class="sidebar__link"><a href="#">Baking</a></li>
+                        <li class="sidebar__link"><a href="#">Technology</a></li>
+                        <li class="sidebar__link"><a href="#">Web Development</a></li>
+                        <li class="sidebar__link"><a href="#">Lifestyle</a></li>
+                        <li class="sidebar__link"><a href="#">Politics</a></li>
+                    </ul>
+                </div>
+            </div>
+            <main class="main">
+                Welcome <?php echo ($_SESSION['user_name']); ?> <a href="logout.php">Logout</a>
+            </main>
+        </div>
+    </div>
+</div>
 
-    Page::ForceLogout();
-?>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-    Welcome to Fesbuk
-    <!-- <?php var_dump($_SESSION); ?>   -->
-    <a href="logout.php">Logout</a>
-</body>
-</html>
+<?php include "inc/footer.php"; ?>

@@ -2,10 +2,16 @@ body {
     font-family: "Lato", sans-serif;
     font-weight: 400;
     line-height: 1.7;
-    color: $color-grey-dark;
 }
 
 
 .heading-1 {
     color: $color-black-light;
+}
+
+a,
+a:link {
+    display: block;
+    text-decoration: none;
+    color: $color2;
 }
