@@ -30,12 +30,12 @@
             </button>
         </form>
         <nav class="user-nav">
-            <span class="user-nav__username"><?php echo ( isset($_SESSION['user_name']) ) ? $_SESSION['user_name'] : ''; ?></span>
-            <div class="user-nav__icon-box">
+            <span class="user-nav__username"><a href="<?php echo ( isset($_SESSION['user_name']) ) ? $_SESSION['user_name'] : ''; ?>" class="user-nav__link"><?php echo ( isset($_SESSION['user_name']) ) ? $_SESSION['user_name'] : ''; ?></a></span>
+            <!-- <div class="user-nav__icon-box">
                 <svg class="user-nav__icon">
                     <use xlink:href="assets/img/sprite.svg#icon-magnifying-glass"></use>
                 </svg>
-            </div>
+            </div> -->
             <div class="user-nav__icon-box">
                 <svg class="user-nav__icon">
                     <use xlink:href="assets/img/sprite.svg#icon-home"></use>

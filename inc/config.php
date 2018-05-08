@@ -20,7 +20,9 @@
     include_once "classes/Constant.php";
     include_once "utilities.php";
     include_once "classes/User.php";
+    include_once "classes/Post.php";
     include_once "classes/Page.php";
+    include_once "classes/Like.php";
 
     //Create New DB Connection
     $con = DB::getConnection();

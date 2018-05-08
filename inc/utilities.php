@@ -6,6 +6,22 @@
 	require_once "config.php";
 	
 
+	//DB FUNCTIONS
+
+	function updateTableField($con, $table_name, $field_name, $field_value, $matching_filed, $matching_field_value) {
+		$sql_update = "UPDATE $table_name SET $field_name = :field_value WHERE $matching_filed = :matching_field_value LIMIT 1";
+		$stmt = $con->prepare($sql_update);
+		$stmt->execute(array(":field_value"=>$field_value, ":matching_field_value"=>$matching_field_value));
+
+		if ( $stmt->rowCount() == 1 ) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+
 	//MISC FUNCTIONS///////////////////////////////////////////////////////////
 	
 	function redirectTo($page){

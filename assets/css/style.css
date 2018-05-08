@@ -47,7 +47,6 @@ body {
 
 a,
 a:link {
-  display: block;
   text-decoration: none;
   color: #386fa4; }
 
@@ -220,8 +219,85 @@ a:link {
       color: #fff; }
 
 /* Change Autocomplete styles in Chrome*/
-.header {
+.post-entry {
   display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  border: 1px solid rgba(204, 204, 204, 0.3);
+  border-radius: 3px;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  box-shadow: 0 0.3rem 1rem rgba(0, 0, 0, 0.15); }
+
+.post-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin-bottom: .8rem; }
+  .post-header__img {
+    flex: 0 0 5rem;
+    height: 5rem;
+    border-radius: 3px;
+    margin-right: 1rem; }
+  .post-header__details {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    flex: 1;
+    font-size: 1.3rem; }
+  .post-header__edit-btn {
+    cursor: pointer;
+    color: #59a5d8;
+    text-decoration: none;
+    font-size: 1.3rem; }
+    .post-header__edit-btn:hover {
+      color: #386fa4; }
+  .post-header__author {
+    color: #386fa4;
+    flex: 0 0 20%;
+    font-size: 1.3rem;
+    font-weight: 600; }
+  .post-header__date-posted {
+    flex: 1;
+    font-size: 1.2rem; }
+
+.post-body {
+  padding: .5rem 0 1rem 0;
+  font-size: 1.4rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1); }
+
+.post-footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: flex-start;
+  padding: 1rem 0 .0rem 0;
+  text-align: center; }
+  .post-footer__link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    color: #59a5d8;
+    border: none;
+    background-color: transparent;
+    font-size: 1.4rem;
+    flex: 0 0 8rem; }
+    .post-footer__link:hover, .post-footer__link:focus {
+      outline: none;
+      color: #386fa4; }
+  .post-footer__icon {
+    fill: #666;
+    height: 2rem;
+    width: 2rem;
+    margin-right: .5rem; }
+
+.js--liked {
+  fill: #59a5d8; }
+
+.header {
+  display: inline-flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
@@ -233,7 +309,7 @@ a:link {
     cursor: pointer;
     color: #fff;
     height: 6rem;
-    width: 12rem;
+    flex: 0 0 8%;
     margin-left: 2rem; }
 
 .search {
@@ -285,8 +361,9 @@ a:link {
 .user-nav {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: stretch;
+  flex: 0 0 40%;
   height: 100%; }
   .user-nav > * {
     cursor: pointer;
@@ -300,10 +377,11 @@ a:link {
   .user-nav__icon-box:hover .user-nav__icon {
     fill: #fff; }
   .user-nav__username {
-    color: #fff;
     width: auto;
     display: flex;
     align-items: center; }
+  .user-nav__link, .user-nav__link:link, .user-nav__link:visited {
+    color: #fff; }
   .user-nav__icon {
     width: 100%;
     height: 100%; }
@@ -371,6 +449,7 @@ a:link {
   height: 100%;
   margin: 2rem 1rem 1rem 1rem; }
   .sidebar-links {
+    display: block;
     font-size: 1.4rem;
     padding: 1.5rem;
     border-radius: 3px;
@@ -382,7 +461,15 @@ a:link {
     background-color: #386fa4; }
   .sidebar__list {
     list-style: none;
-    margin: 1.5rem .2rem 1rem 1rem; }
+    margin: 1rem 0; }
+  .sidebar__link {
+    display: block;
+    padding: .1rem;
+    border-radius: 3px;
+    transition: all .1s; }
+    .sidebar__link:hover {
+      padding-left: .5rem;
+      background-color: rgba(19, 60, 85, 0.1); }
 
 .user-info {
   display: flex;
@@ -456,3 +543,36 @@ a:link {
     left: 0;
     min-width: 100%;
     height: 100%; }
+
+.wall__form {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem; }
+
+.wall__textarea {
+  font-size: 1.5rem;
+  font-family: inherit;
+  border: 1px solid rgba(19, 60, 85, 0.3);
+  border-radius: 3px;
+  width: 80%;
+  height: 5rem;
+  padding: 1rem;
+  resize: none; }
+  .wall__textarea:focus {
+    outline: none; }
+
+.wall__submit {
+  color: rgba(255, 255, 255, 0.6);
+  width: 18%;
+  height: 5rem;
+  font-size: 1.6rem;
+  border: none;
+  border-radius: 3px;
+  background-color: #59a5d8;
+  transition: all .1s; }
+  .wall__submit:hover {
+    color: white;
+    outline: none;
+    background-color: #386fa4; }

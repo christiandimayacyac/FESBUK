@@ -1,0 +1,114 @@
+.post-entry {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    border: 1px solid rgba($color-grey-dark,0.3);
+    border-radius: 3px;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    box-shadow: 0 0.3rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.post-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin-bottom: .8rem;
+
+
+    &__img {
+        flex: 0 0 5rem;
+        height: 5rem;
+        border-radius: 3px;
+        margin-right: 1rem;
+    }
+
+    &__details {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        flex: 1;
+        font-size: 1.3rem;
+        
+    }
+
+    &__edit-btn {
+        cursor: pointer;
+        color: $color3;
+        text-decoration: none;
+        font-size: 1.3rem;
+
+        &:hover {
+            color: $color2;
+        }
+
+        // &:hover,
+        // &:active {
+        //     outline: none;
+        // }
+    }
+
+    &__author {
+        color:$color2;
+        flex: 0 0 20%;
+        font-size: 1.3rem;
+        font-weight: 600;
+    }
+
+    &__date-posted {
+        flex: 1;
+        font-size: 1.2rem;
+    }
+}
+
+.post-body {
+    padding: .5rem 0 1rem 0;
+    font-size: 1.4rem;
+    border-bottom: 1px solid rgba($color-black,0.1);
+}
+
+.post-footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: flex-start;
+    padding: 1rem 0 .0rem 0;
+    text-align: center;
+
+    &__link {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        color: $color3;
+        border: none;
+        background-color: transparent;
+        font-size: 1.4rem;
+        flex: 0 0 8rem;
+
+        &:hover,
+        &:focus {
+            outline: none;
+            color: $color2;
+        }
+
+    }
+
+    &__icon {
+        fill: $color-grey-darker;
+        height: 2rem;
+        width: 2rem;
+        margin-right: .5rem;
+    }
+    
+
+}
+
+.js--liked {
+    fill: $color3;
+}
+
+
+
+

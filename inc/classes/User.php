@@ -1,4 +1,9 @@
 <?php
+    // if __CONFIG__ is not defined, do not load this file
+    if( !defined('__CONFIG__') ) {
+        exit('Config File is not defined.');
+    }
+
     class User {
         
         private $con;
@@ -10,18 +15,23 @@
         public $last_name;
         public $email;
         public $hashed_password;
+        public $profile_pic = "default.png";
         public $reg_time;
+        public $num_posts;
+        public $num_likes;
+
 
         //initialize a property that will hold errors
         
 
-        public function __construct($con)  {
+        public function __construct($con, $user_id=0)  {
             //start a new DB connection
             $this->con = $con;
             $this->errors_array = array();
 
-    
-
+            if ( $user_id > 0 ) {
+                $this->getUserInfo($user_id);
+            }
         }
 
         private function clearErrors() {
@@ -43,6 +53,8 @@
             //get hashed value of password
             $hashed_pwd = $this->getPwdHashedValue($pwd);
 
+            // $prof_pic = "../../assets/img/uploads/" . $this->profile_pic;
+
             try{
                $sql_insert  = "INSERT INTO users (user_name, first_name, last_name, email, password) VALUES (:user_name, :first_name, :last_name, :email, :hashed_password) ";
                $stmt = $this->con->prepare($sql_insert);
@@ -59,15 +71,12 @@
             return $db_error;
         }
 
-        //function that returns the hashed value
-        private function getPwdHashedValue($raw_data) {
-            return ( !empty($raw_data) ) ? password_hash($raw_data, PASSWORD_DEFAULT) : NULL;
-        }
+        
 
 
         public function login($user_name, $password) {
-            $login_success = false;
 
+            $login_success = false;
             $this->clearErrors();
 
             //query user info and save it to class properties
@@ -79,13 +88,8 @@
 
                 //verify password
                 if ( password_verify($password, $rs['password']) ) {
-                    $this->user_id = $rs['user_id'];
-                    $this->user_name = $rs['user_name'];
-                    $this->first_name = $rs['user_id'];
-                    $this->last_name = $rs['user_id'];
-                    $this->email = $rs['user_id'];
-                    $this->hashed_password = $rs['user_id'];
-                    $this->reg_time = $rs['user_id'];
+                    
+                    $this->setClassProperties($rs);
 
                     $this->createUserSession('user_id', $rs['user_id']);
                     $this->createUserSession('user_name', $rs['user_name']);
@@ -101,12 +105,73 @@
             }
 
             return $login_success;
+
+        }
+
+        public function incrementLikes($num_likes) {
+            $num_likes++;
+            return updateTableField($this->con, "users", "num_likes", $num_likes, "user_id", $this->user_id);
+        }
+
+        public function decrementLikes($num_likes) {
+            $num_likes--;
+            return updateTableField($this->con, "users", "num_likes", $num_likes, "user_id", $this->user_id);
+        }
+
+        //Get User Info
+        public function getUserInfo($user_id) {
+
+            $this->clearErrors();
+
+            //query user info and save it to class properties
+            $sql_query = "SELECT * FROM users WHERE user_id = :user_id";
+            $stmt = $this->con->prepare($sql_query);
+            $stmt->execute(array(":user_id"=>$user_id));
+
+            if ( $rs = $stmt->fetch(PDO::FETCH_ASSOC) ) {
+
+                $this->setClassProperties($rs);
+
+            }
+            else {
+
+                array_push($this->errors_array, Constant::$user_not_exists);
+
+            }
+        }
+
+        private function setClassProperties($rs) {
+
+            if ( !empty($rs) ) {
+                $this->user_id = $rs['user_id'];
+                $this->user_name = $rs['user_name'];
+                $this->first_name = $rs['first_name'];
+                $this->last_name = $rs['last_name'];
+                $this->email = $rs['email'];
+                $this->hashed_password = $rs['password'];
+                $this->reg_time = $rs['reg_time'];
+                $this->profile_pic = $rs['profile_pic'];
+                $this->num_posts = $rs['num_posts'];
+                $this->num_likes = $rs['num_likes'];
+            }
+
+        }
+
+        public function getNumPosts() {
+            return $this->num_posts;
+        }
+
+
+        //function that returns the hashed value
+        private function getPwdHashedValue($raw_data) {
+            return ( !empty($raw_data) ) ? password_hash($raw_data, PASSWORD_DEFAULT) : NULL;
         }
 
         //Main validation call
         public function validateAll($con, $form_fields, $form_type) {
 
             if ( $form_type == "register" ) {
+
                 //check for empty fields
                 $this->checkEmptyFields($form_fields);
                 //check for field lengths
@@ -117,12 +182,15 @@
                 if ( $this->checkIfExists($con, 'users', 'email', $form_fields[3]['Email']) && empty($this->errors_array) ) array_push($this->errors_array, Constant::$email_exists_err);
                 //validate 2 passwords
                 if ( !$this->validatePassword($form_fields) && empty($this->errors_array) ) array_push($this->errors_array, Constant::$password_mismatch_err);
+
             }
             else{
+
                 //check for empty fields
                 $this->checkEmptyFields($form_fields);
                 //check for field lengths
                 $this->checkMinLength($form_fields);
+
             }
             
             //if returns TRUE, proceed with the registration
@@ -141,7 +209,7 @@
                 $the_val = current($form_val); //contains the CURRENT value element on each sub array
 
                 //remove white spaces in the input data
-                $form_val[$the_key] = preg_replace('/\s/', '', $form_val[$the_key]);
+                $form_val[$the_key] = preg_replace('/\s+/', '', $form_val[$the_key]);
 
                 if( empty($form_val[$the_key]) || $form_val[$the_key] == NULL ){
                         $form_errors[] = $the_key . " is a required field";

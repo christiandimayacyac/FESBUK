@@ -1,5 +1,5 @@
 .header {
-    display: flex;
+    display: inline-flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
@@ -12,7 +12,7 @@
         cursor: pointer;
         color: $color-white;
         height: 6rem;
-        width: 12rem;
+        flex: 0 0 8%;
         margin-left: 2rem;
     }
 }
@@ -88,8 +88,9 @@
 .user-nav {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: stretch;
+    flex: 0 0 40%;
     height: 100%;
 
     & > * {
@@ -111,10 +112,16 @@
     }
 
     &__username {
-        color: $color-white;
+        
         width: auto;
         display: flex;
         align-items: center;
+    }
+
+    &__link,
+    &__link:link,
+    &__link:visited {
+        color: $color-white;
     }
 
     &__icon {
