@@ -47,6 +47,26 @@
              return true;
         }
 
+        public function isLikeEntryExists() {
+            $sql_query = "SELECT * FROM likes WHERE post_id = :post_id AND user_id = :user_id LIMIT 1";
+            $stmt = $this->con->prepare($sql_query);
+            $stmt->execute(array(":post_id"=>$this->post_id, ":user_id"=>$this->user_id));
+
+            if ( $stmt->rowCount() == 1 ) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
+        public function getUserId() {
+            return $this->user_id;
+        }
+        
+        public function getPostId() {
+            return $this->post_id;
+        }
 
     }
 

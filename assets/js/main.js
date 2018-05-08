@@ -37,17 +37,17 @@ $(document).on("click", ".js--like", () =>{
 
     if ( $(theButton).children(".post-footer__icon").hasClass("js--liked") ) {
         // alert("liked the post");
-        console.log("liked:" + $post_id);
+        // console.log("liked:" + $post_id);
         $.post("inc/ajax/likes-ajax.php",{like_flag: true, post_id:$post_id, operation:"insert"})
             .done(function(result){
-                console.log(result);
+                // console.log(result);
         });
     }
     else {
-        console.log("unliked:" + $post_id);
+        // console.log("unliked:" + $post_id);
         $.post("inc/ajax/likes-ajax.php",{like_flag: true, post_id:$post_id, operation:"delete"})
             .done(function(result){
-                console.log(result);
+                // console.log(result);
         });
     }
 });

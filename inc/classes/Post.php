@@ -166,7 +166,8 @@
                 //retrieve user's profile pic
                 $profile_pic = "assets/img/uploads/" . $this->User_Obj->profile_pic;
                 //retrieve post author's name
-                $post_author = $this->User_Obj->first_name . " " . $this->User_Obj->last_name;
+                // $post_author = $this->User_Obj->first_name . " " . $this->User_Obj->last_name;
+                $post_author = "{$this->User_Obj->first_name} {$this->User_Obj->last_name}";
                 
                 while ($post_entry = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     $post_html = "";
@@ -183,6 +184,10 @@
 
                     $time_label = $this->getPostTimeInterval($date_time_diff);
 
+                    //check if current_user liked the current post; add "js--liked" class to like button
+                    $Like_Obj = new Like($this->con, $post_entry['post_id'], $user_id);
+                    $svg_html = ( $Like_Obj->isLikeEntryExists() ) ? "<svg class='post-footer__icon js--liked'>" : "<svg class='post-footer__icon'>";
+
                     //if POST is for user's own wall  craft a POST-ENTRY HTML
                     // if ( $recipient == "none" ) {
                         $post_html .= "<div class='post-entry' data-pid='$post_id'>
@@ -198,7 +203,7 @@
                                             <p class='post-body'>$post_body</p>
                                             <div class='post-footer'>
                                                 <button class='post-footer__link js--like'>
-                                                    <svg class='post-footer__icon'>
+                                                    $svg_html
                                                         <use xlink:href='assets/img/sprite.svg#icon-thumbs-up'></use>
                                                     </svg>
                                                     Like
