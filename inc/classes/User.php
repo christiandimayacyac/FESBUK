@@ -61,7 +61,8 @@
                $stmt->execute(array(':user_name'=>$u_name, ':first_name'=>$f_name, ':last_name'=>$l_name, ':email'=>$email, ':hashed_password'=>$hashed_pwd));
 
                if ( $stmt->rowCount() == 1 ) {
-                   $this->createUserSession('user_id', $this->con->lastInsertId());
+                    $this->createUserSession('user_id', $this->con->lastInsertId());
+                    $this->createUserSession('user_name', "$u_name");
                }
             }
             catch(PDOException $ex){

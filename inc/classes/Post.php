@@ -89,7 +89,6 @@
         public function submitPost(string $post_body, $recipient = "none", $post_type = 1) {  
             $date_posted = date("Y-m-d H:i:s");
             $author_id = $this->User_Obj->user_id;
-            $author_id = 14;
 
             if ( !$this->isEpmptyString($post_body) ) {
                 //if validated and passed save data to table
@@ -97,6 +96,11 @@
                                 VALUES (:post_author, :post_recipient, :post_body, :date_posted, :date_edited, :public_post_type)";
                 $stmt = $this->con->prepare($sql_insert);
                 $stmt->execute(array(":post_author"=>$author_id , ":post_recipient"=>$recipient, ":post_body"=>$post_body, ":date_posted"=>$date_posted, ":date_edited"=>$date_posted, ":public_post_type"=>$post_type));
+
+                //get last Post_Id inserted
+                $last_post_id = $this->con->lastInsertId();
+                //encrypt post_id to be used as data attribute
+                $post_id = getBase64EncodedValue(Constant::$postEncKey, $last_post_id);
 
                 //update num_posts in users' table
                 $num_posts = $this->User_Obj->getNumPosts();
@@ -118,9 +122,11 @@
 
                 $time_label = $this->getPostTimeInterval($date_time_diff);
 
+                
+
                 //if POST is for user's own wall  craft a POST-ENTRY HTML
                 if ( $recipient == "none" ) {
-                    $post_html = "<div class='post-entry'>
+                    $post_html = "<div class='post-entry' data-pid='$post_id'>
                                     <div class='post-header'>
                                         <img src='$profile_pic' class='post-header__img'>
                                         <div class='post-header__details'>
@@ -132,7 +138,7 @@
 
                                     <p class='post-body'>$post_body</p>
                                     <div class='post-footer'>
-                                        <button class='post-footer__link'>
+                                        <button class='post-footer__link js--like'>
                                             <svg class='post-footer__icon'>
                                                 <use xlink:href='assets/img/sprite.svg#icon-thumbs-up'></use>
                                             </svg>

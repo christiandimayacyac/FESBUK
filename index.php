@@ -38,6 +38,7 @@
             </div>
             <main class="main">
                 Welcome <?php echo ($_SESSION['user_name']); ?>
+                <?php var_dump($_SESSION); ?>
                 <div class="wall">
                     <form action="#" class="wall__form">
                         <textarea class="wall__textarea js--wall__textarea" name="wall__textarea" placeholder="What do you have in mind today?"></textarea>

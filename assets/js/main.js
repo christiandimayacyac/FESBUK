@@ -36,8 +36,6 @@ $(document).on("click", ".js--like", () =>{
     
 
     if ( $(theButton).children(".post-footer__icon").hasClass("js--liked") ) {
-        // alert("liked the post");
-        // console.log("liked:" + $post_id);
         $.post("inc/ajax/likes-ajax.php",{like_flag: true, post_id:$post_id, operation:"insert"})
             .done(function(result){
                 // console.log(result);
@@ -52,11 +50,7 @@ $(document).on("click", ".js--like", () =>{
     }
 });
 
-function setLike(event) {
-    // console.log(event.target);
-    // console.log($(event.target)[0].classList[1]);
-    console.log($(event.target));
-}
+
 
 function submitPost(event) {
     let post_body = $(".js--wall__textarea").val();
