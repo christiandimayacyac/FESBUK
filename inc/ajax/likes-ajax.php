@@ -4,6 +4,9 @@
     include_once "../config.php";
 
     if ( isset($_POST['post_id']) && isset($_POST['like_flag']) && isset($_SESSION['user_id']) && isset($_POST['operation']) ) {
+        //declare a variable to hold the overall operation success flag
+        $update_done = false;
+
         //decode the encrypted post_id from the POST data
         $decoded_pid = getBase64DecodedValue(Constant::$postEncKey, $_POST['post_id']);
         $user_id = $_SESSION['user_id'];
@@ -40,8 +43,9 @@
             //USERS table
             $isUsersLikesUpdated = $UserObj->decrementLikes($user_num_likes);
         }
+
+        $update_done = true;
     }
-    else {
-        echo "no post data received";
-    }
+
+    echo $update_done;
 ?>

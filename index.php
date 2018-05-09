@@ -18,10 +18,10 @@
                             <span class="user-details__first-name"><a href="<?php echo $Cur_user->first_name; ?>" class="user-details__link"><?php echo $Cur_user->first_name; ?></a></span>
                             <span class="user-details__last-name"><a href="<?php echo $Cur_user->last_name; ?>" class="user-details__link"><?php echo $Cur_user->last_name; ?></a></span>
                         </div>
-                        <span class="user-details__num-post">
+                        <span class="user-details__num_posts">
                             Posts: <?php echo $Cur_user->num_posts;?>
                         </span>
-                        <span class="user-details__likes">Likes: <?php echo $Cur_user->num_likes;?></span>
+                        <span class="user-details__num_likes">Likes: <?php echo $Cur_user->num_likes;?></span>
                     </div>
                 </div>
                 <div class="sidebar-links">

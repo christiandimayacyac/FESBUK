@@ -34,22 +34,49 @@ $(document).on("click", ".js--like", () =>{
     
     $post_id = $(theButton).closest(".post-entry").attr("data-pid");
     
+    //get the number of likes in the user details
+    let num_likes = $(".user-details__num_likes").text();
 
     if ( $(theButton).children(".post-footer__icon").hasClass("js--liked") ) {
+        
+
         $.post("inc/ajax/likes-ajax.php",{like_flag: true, post_id:$post_id, operation:"insert"})
             .done(function(result){
-                // console.log(result);
+                console.log("likes ajax result: " + result);
+                if (result) {
+                    //extract the number and convert to int
+                    updatePostLike(num_likes,"likes", "increment");
+                    
+                }
         });
     }
     else {
         // console.log("unliked:" + $post_id);
         $.post("inc/ajax/likes-ajax.php",{like_flag: true, post_id:$post_id, operation:"delete"})
             .done(function(result){
-                // console.log(result);
+                console.log("unlikes ajax result: " + result);
+                if (result) {
+                    //extract the number and convert to int
+                    updatePostLike(num_likes,"likes", "decrement");
+                    
+                }
         });
     }
 });
 
+
+function updatePostLike($el, $type, $operation) {
+    if ( $type == "likes" ) {
+        $likes = parseInt($el.split(":").pop());
+        ($operation == "increment") ? $likes++ : $likes--;
+        $(".user-details__details__num_likes").text("Likes: " + $likes);
+    }
+    else {
+        $posts = parseInt($el.split(":").pop());
+        ($operation == "increment") ? $posts++ : $posts--;
+        $(".user-details__num_posts").text("Posts: " + $posts);
+    }
+}
 
 
 function submitPost(event) {
@@ -58,7 +85,14 @@ function submitPost(event) {
 
     $.post("inc/ajax/posts-ajax.php",{user_id:user_id, post_body:post_body})
     .done(function(result){
+
         $(result).insertAfter(".wall__form");
+
+        //get the number of likes in the user details
+        let num_posts = $(".user-details__num_posts").text();
+        updatePostLike(num_posts,"posts", "increment")
+
+        $(".js--wall__textarea").val("");
     });
 }
 

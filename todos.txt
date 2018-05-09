@@ -1,0 +1,8 @@
+ASAP
+-update number of posts and likes in the user info box @ sidebar
+
+
+-remember me: use cookies with expiration
+-edit button
+-comments button
+-search button
