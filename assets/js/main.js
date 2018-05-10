@@ -1,4 +1,6 @@
-document.addEventListener('DOMContentLoaded', function() {
+$(document).ready(function(){
+
+    //LOGIN AND REGISTER FORMS/////////////////////////
     //toggles login and register form
     let switches =  document.querySelectorAll(".js--switch");
 
@@ -17,6 +19,50 @@ document.addEventListener('DOMContentLoaded', function() {
         submitPost();
     });
 
+    //POSTS////////////////////////////////////////////
+    let start = 0;
+    let limit = 7;
+    let ready_to_fetch = true;
+
+    //function that sends ajax request to fetch-posts-ajax.php to pull posts from the database
+    function loadUserPosts() {
+        $.post("inc/ajax/fetch-posts-ajax.php",{start:start, limit:limit})
+            .done(function(result){
+                if ( result == "" ) {
+                    ready_to_fetch = false;
+                    $(".loading__info").hide();
+                }
+                else {
+                    ready_to_fetch = true;
+                    $(".wall__posts").append(result);
+                }
+            });
+    }
+
+    if ( ready_to_fetch ) {
+        ready_to_fetch = false;
+        loadUserPosts();
+    }
+
+
+    $(window).scroll(function(){
+        if ( ($(window).scrollTop() + $(window).height() > $(".wall").height() + $("header").height() + 50) && ready_to_fetch == true ) {
+            
+            $(".loading__info").show();
+            start = start + limit;
+            setTimeout(function(){
+                loadUserPosts();
+            }, 1500);
+            ready_to_fetch = false;
+        }
+        else if ( ($(window).scrollTop() + $(window).height() > $(".wall").height() + $("header").height() + 50) && ready_to_fetch == false  ){
+            // console.log("scrolling");
+        }
+    });
+    
+});
+    
+
     //Like EventListener
     // document.querySelector(".js--like").addEventListener('click', event => {
     //     event.preventDefault();
@@ -25,9 +71,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // });
 
 
-});
+    
+
+
 
 $(document).on("click", ".js--like", () =>{
+    console.log("like clicked");
     $(event.target).children(".post-footer__icon").toggleClass("js--liked");
 
     let theButton = event.target;
@@ -54,7 +103,6 @@ $(document).on("click", ".js--like", () =>{
         // console.log("unliked:" + $post_id);
         $.post("inc/ajax/likes-ajax.php",{like_flag: true, post_id:$post_id, operation:"delete"})
             .done(function(result){
-                console.log("unlikes ajax result: " + result);
                 if (result) {
                     //extract the number and convert to int
                     updatePostLike(num_likes,"likes", "decrement");
@@ -69,7 +117,7 @@ function updatePostLike($el, $type, $operation) {
     if ( $type == "likes" ) {
         $likes = parseInt($el.split(":").pop());
         ($operation == "increment") ? $likes++ : $likes--;
-        $(".user-details__details__num_likes").text("Likes: " + $likes);
+        $(".user-details__num_likes").text("Likes: " + $likes);
     }
     else {
         $posts = parseInt($el.split(":").pop());

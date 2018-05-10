@@ -161,10 +161,10 @@
             return "";
         }
 
-        public function loadPosts($user_id) {
+        public function loadPosts($user_id, $limit, $start) {
             
             if ( $user_id > 0 ) {
-                $sql_query = "SELECT * FROM posts WHERE post_author = :user_id ORDER BY date_posted DESC LIMIT 5";
+                $sql_query = "SELECT * FROM posts WHERE post_author = :user_id ORDER BY date_posted DESC LIMIT $start, $limit";
                 $stmt = $this->con->prepare($sql_query);    
                 $stmt->execute(array(":user_id"=>$user_id));
 
@@ -175,8 +175,9 @@
                 // $post_author = $this->User_Obj->first_name . " " . $this->User_Obj->last_name;
                 $post_author = "{$this->User_Obj->first_name} {$this->User_Obj->last_name}";
                 
+                $post_html = "";
                 while ($post_entry = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                    $post_html = "";
+                    
                     //retrieve post id and body
                     $post_id = getBase64EncodedValue(Constant::$postEncKey, $post_entry['post_id']);
                     $post_body = $post_entry['post_body'];
@@ -222,10 +223,10 @@
                                                 </button>
                                             </div>
                                         </div>";
-                        echo $post_html;
                     // }
                 }
                 
+                return $post_html;
             }
 
         }

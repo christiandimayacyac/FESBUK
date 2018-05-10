@@ -38,14 +38,15 @@
             </div>
             <main class="main">
                 Welcome <?php echo ($_SESSION['user_name']); ?>
-                <?php var_dump($_SESSION); ?>
                 <div class="wall">
                     <form action="#" class="wall__form">
                         <textarea class="wall__textarea js--wall__textarea" name="wall__textarea" placeholder="What do you have in mind today?"></textarea>
                         <input type="text" class="js--wall__input" value="<?php echo $Cur_user->user_id; ?>" hidden>
                         <button class="wall__submit js--wall__submit" name="wall__submit">Post</button>
                     </form>
-                    <?php $User_posts->loadPosts($_SESSION['user_id']); ?>
+                    <div class="wall__posts"></div>
+                    <!-- <?php $User_posts->loadPosts($_SESSION['user_id'], 7, 0); ?> -->
+                    <div class="loading__info"></div>
                 </div>
 
 

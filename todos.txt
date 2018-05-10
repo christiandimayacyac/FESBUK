@@ -1,5 +1,6 @@
 ASAP
--update number of posts and likes in the user info box @ sidebar
+-autoscroll
+-display other user's posts where current user is the recipient
 
 
 -remember me: use cookies with expiration
