@@ -52,7 +52,7 @@ $(document).ready(function(){
             start = start + limit;
             setTimeout(function(){
                 loadUserPosts();
-            }, 1500);
+            }, 1000);
             ready_to_fetch = false;
         }
         else if ( ($(window).scrollTop() + $(window).height() > $(".wall").height() + $("header").height() + 50) && ready_to_fetch == false  ){
