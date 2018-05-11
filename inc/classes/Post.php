@@ -164,16 +164,32 @@
         public function loadPosts($user_id, $limit, $start) {
             
             if ( $user_id > 0 ) {
-                $sql_query = "SELECT * FROM posts WHERE post_author = :user_id ORDER BY date_posted DESC LIMIT $start, $limit";
+                //SELECT ALL POSTS 
+                $sql_query = "SELECT DISTINCT
+                                    posts.post_id,
+                                    posts.post_author,
+                                    posts.post_recipient,
+                                    posts.post_body,
+                                    posts.date_posted,
+                                    posts.date_edited,
+                                    posts.post_deleted,
+                                    posts.public_post_type,
+                                    posts.likes,
+                                    relationship.status
+                                FROM
+                                    posts
+                                INNER JOIN 
+                                    relationship 
+                                ON
+                                    ( ((posts.post_author = relationship.user_one_id AND :user_id = relationship.user_two_id) AND relationship.status = 1 ) OR 
+                                    ((posts.post_author = relationship.user_two_id AND :user_id = relationship.user_one_id) AND relationship.status = 1 )
+                                    OR (posts.post_author = :user_id OR posts.post_recipient = :user_id) ) 
+                                ORDER BY 
+                                    posts.date_posted DESC 
+                                LIMIT $start, $limit";
+
                 $stmt = $this->con->prepare($sql_query);    
                 $stmt->execute(array(":user_id"=>$user_id));
-
-                
-                //retrieve user's profile pic
-                $profile_pic = "assets/img/uploads/" . $this->User_Obj->profile_pic;
-                //retrieve post author's name
-                // $post_author = $this->User_Obj->first_name . " " . $this->User_Obj->last_name;
-                $post_author = "{$this->User_Obj->first_name} {$this->User_Obj->last_name}";
                 
                 $post_html = "";
                 while ($post_entry = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -195,8 +211,110 @@
                     $Like_Obj = new Like($this->con, $post_entry['post_id'], $user_id);
                     $svg_html = ( $Like_Obj->isLikeEntryExists() ) ? "<svg class='post-footer__icon js--liked'>" : "<svg class='post-footer__icon'>";
 
+
+                    if ( $post_entry['post_author'] == $user_id ) {
+                        //retrieve user's profile pic
+                        $profile_pic = "assets/img/uploads/" . $this->User_Obj->profile_pic;
+                        //retrieve post author's name
+                        $post_author = "{$this->User_Obj->first_name} {$this->User_Obj->last_name}";
+                    }
+                    else {
+                        //create new user object for the friend's details
+                        $Friend_User_Obj = new User($this->con, $post_entry['post_author']);
+                        //retrieve friend's profile pic
+                        $profile_pic = "assets/img/uploads/" . $Friend_User_Obj->profile_pic;
+                        //retrieve friend's name
+                        $post_author = "{$Friend_User_Obj->first_name} {$Friend_User_Obj->last_name}";
+                    }
+   
+
+                    $post_html .= "<div class='post-entry' data-pid='$post_id'>
+                                        <div class='post-header'>
+                                            <img src='$profile_pic' class='post-header__img'>
+                                            <div class='post-header__details'>
+                                                <span class='post-header__author'>$post_author</span>
+                                                <span class='post-header__date-posted'>$time_label</span>
+                                            </div>
+                                            <a href='#' class='post-header__edit-btn'>Edit</a>
+                                        </div>
+
+                                        <p class='post-body'>$post_body</p>
+                                        <div class='post-footer'>
+                                            <button class='post-footer__link js--like'>
+                                                $svg_html
+                                                    <use xlink:href='assets/img/sprite.svg#icon-thumbs-up'></use>
+                                                </svg>
+                                                Like
+                                            </button>
+                                            <button class='post-footer__link js--comment'>
+                                                <svg class='post-footer__icon'>
+                                                    <use xlink:href='assets/img/sprite.svg#icon-message'></use>
+                                                </svg>
+                                                Comments
+                                            </button>
+                                        </div>
+                                    </div>";
+
+                }
+                
+                return $post_html;
+            }
+
+        }
+
+        public function loadUserFriendsPosts($user_id, $limit, $start) {
+            
+            if ( $user_id > 0 ) {
+                $sql_query = "SELECT * FROM posts WHERE post_author = :user_id OR post_recipient = :post_recipient ORDER BY date_posted DESC LIMIT $start, $limit";
+                $stmt = $this->con->prepare($sql_query);    
+                $stmt->execute(array(":user_id"=>$user_id, ":post_recipient"=>$user_id));
+                
+                $post_html = "";
+                while ($post_entry = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    
+                    //retrieve post id and body
+                    $post_id = getBase64EncodedValue(Constant::$postEncKey, $post_entry['post_id']);
+                    $post_body = $post_entry['post_body'];
+
+                    //calculate time passed after posting
+                    $current_date_time = date("Y-m-d H:i:s");
+                    $start_date_time = new DateTime($post_entry['date_posted']);
+                    $end_date_time = new DateTime($current_date_time);
+                    $date_time_diff = $start_date_time->diff($end_date_time);
+
+
+                    $time_label = $this->getPostTimeInterval($date_time_diff);
+
+                    //check if current_user liked the current post; add "js--liked" class to like button
+                    $Like_Obj = new Like($this->con, $post_entry['post_id'], $user_id);
+                    $svg_html = ( $Like_Obj->isLikeEntryExists() ) ? "<svg class='post-footer__icon js--liked'>" : "<svg class='post-footer__icon'>";
+
+                    //set the post header details based on the post author and post recipient
+                    $post_recipient = $post_entry['post_recipient'];
+
+                    
+                    //check if the current user is the post recipient
+                    if ( $post_recipient == $user_id ) {
+                        $post_author_id = $post_entry['post_author'];
+                        //create a user object for the post author
+                        $Friend_User_Obj = new User($this->con, $post_author_id);
+                        //get the post author's details
+                        $Friend_User_Obj->getUserInfo($post_author_id);
+
+                        //retrieve user's profile pic
+                        $profile_pic = "assets/img/uploads/" . $Friend_User_Obj->profile_pic;
+                        //retrieve post author's name
+                        $post_author = "{$Friend_User_Obj->first_name} {$Friend_User_Obj->last_name}";
+                    }
+                    else {
+                        //retrieve user's profile pic
+                        $profile_pic = "assets/img/uploads/" . $this->User_Obj->profile_pic;
+                        //retrieve post author's name
+                        $post_author = "{$this->User_Obj->first_name} {$this->User_Obj->last_name}";
+                    }
+
                     //if POST is for user's own wall  craft a POST-ENTRY HTML
-                    // if ( $recipient == "none" ) {
+                    // if ( $post_recipient == "none" ) {
                         $post_html .= "<div class='post-entry' data-pid='$post_id'>
                                             <div class='post-header'>
                                                 <img src='$profile_pic' class='post-header__img'>

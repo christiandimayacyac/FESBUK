@@ -76,7 +76,6 @@ $(document).ready(function(){
 
 
 $(document).on("click", ".js--like", () =>{
-    console.log("like clicked");
     $(event.target).children(".post-footer__icon").toggleClass("js--liked");
 
     let theButton = event.target;
@@ -91,7 +90,6 @@ $(document).on("click", ".js--like", () =>{
 
         $.post("inc/ajax/likes-ajax.php",{like_flag: true, post_id:$post_id, operation:"insert"})
             .done(function(result){
-                console.log("likes ajax result: " + result);
                 if (result) {
                     //extract the number and convert to int
                     updatePostLike(num_likes,"likes", "increment");
