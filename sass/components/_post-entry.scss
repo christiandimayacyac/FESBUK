@@ -5,13 +5,18 @@
     border: 1px solid rgba($color-grey-dark,0.3);
     border-radius: 3px;
     margin-bottom: 2rem;
-    padding: 1rem;
+    overflow: hidden;
     box-shadow: 0 0.3rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.post-content {
+    padding: 1rem;
 }
 
 .post-header {
     display: flex;
     flex-direction: row;
+    position: relative;
     justify-content: flex-start;
     align-items: flex-start;
     margin-bottom: .8rem;
@@ -33,13 +38,18 @@
         
     }
 
-    &__edit-btn {
+    &__options-btn {
         cursor: pointer;
-        color: $color3;
-        text-decoration: none;
-        font-size: 1.3rem;
+        align-self: flex-start;
+        color: $color-grey-dark;
+        font-size: 2rem;
+        line-height: 0;
+        background-color: transparent;
+        border: none;
 
-        &:hover {
+        &:hover,
+        &:focus {
+            outline: none;
             color: $color2;
         }
 
@@ -47,6 +57,32 @@
         // &:active {
         //     outline: none;
         // }
+    }
+
+    &__options-menu {
+        position: absolute;
+        top: 1.2rem;
+        right: 0;
+        border: 1px solid $color-grey-dark;
+        padding: .5rem 0;
+        border-radius: 3px;
+        list-style: none;
+        width: 8rem;
+        height: 5rem;
+    }
+
+    &__options-item {
+        display: block;
+        cursor: pointer;
+        font-size: 1.2rem;
+        line-height: 2rem;
+        color: $color-grey-darkest;
+        padding-left: .5rem;
+
+        &:hover {
+            color: $color-white;
+            background-color: $color2;
+        }
     }
 
     &__author {
@@ -104,6 +140,70 @@
     
 
 }
+
+.post-comment {
+    
+    &__form {
+        display: none;
+        flex-direction: row;
+        justify-content: flex-start;
+        background-color: rgba($color-grey-dark,.3);
+        // padding: 2rem 1rem 1rem 2rem;
+        padding: 2rem;
+        padding-bottom: 1.6rem;
+        font-size: 1.3rem;
+    }
+
+    &__textbox {
+        align-self: flex-start;
+        background-color: $color-white;
+        border-radius: 20px;
+        padding: .5rem 1rem;
+        margin-left: 1rem;
+        min-width: 56rem;
+        max-width: 56rem;
+    }
+
+    &__avatar {
+        width: 3.2rem;
+        height: 3.2rem;
+        border-radius: 100px;
+        border: 1px solid rgba($color-grey-dark,.7);
+
+        &-link {
+            align-self: flex-start;
+        }
+    }
+
+    &__author-link {
+        display: none;
+        font-weight: 600;
+    }
+
+    &__input {
+        display: inline-block;
+        user-select: text;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        margin-left: .5rem;
+        width: 53rem;
+    
+        &:focus {
+            outline: none;
+        }
+    }  
+
+    &__placeholder {
+        
+    }
+    
+    &__body {
+        display: none;
+    }
+    
+}
+
+
 
 .js--liked {
     fill: $color3;

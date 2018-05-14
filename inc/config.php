@@ -23,6 +23,7 @@
     include_once "classes/Post.php";
     include_once "classes/Page.php";
     include_once "classes/Like.php";
+    include_once "classes/Comment.php";
 
     //Create New DB Connection
     $con = DB::getConnection();

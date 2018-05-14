@@ -19,6 +19,76 @@ $(document).ready(function(){
         submitPost();
     });
 
+    //Post Options Button EventListener
+    $(document).on("click", ".post-header__options-btn", function(event) {
+        event.preventDefault();
+        // alert("options clicked");
+        $("<ul class='post-header__options-menu'><li class='post-header__options-item'>Edit Post</li><li class='post-header__options-item'>Delete Post</li></ul>").insertAfter(event.target)
+    });
+
+    $(document).on('keypress','.js--post-comment__input',function(event) {
+        let hidden_textarea = $(event.target).find(".js--post-comment__body");
+        
+        if (event.keyCode == 13) {  // detect the enter key
+            if ( $(this).text().trim == "" ) {
+                event.preventDefault();
+            }
+            else {
+                event.preventDefault();
+                $(hidden_textarea).html($(event.target).text());
+                let the_comment =   $(hidden_textarea).html();
+                let post_id = $(hidden_textarea).closest(".post-entry").attr("data-pid");
+                //send an AJAX request to save the new comment
+                console.log("to send: " + the_comment + " - " + post_id);
+                $.post("inc/ajax/fetch-comment-ajax.php",{post_id:post_id,the_comment:the_comment})
+                    .done(function(result){
+                        if ( result == "" ) {
+                            console.log("No Comment");
+                        }
+                        else {
+                            console.log(result);
+                        }
+
+                    });
+            }
+            
+        }
+    });
+
+    $(document).on('focusin','.js--post-comment__input',function(event) {
+        let placeholder = $(this).find('.post-comment__placeholder');
+        if ( $(this).text() == $(placeholder).text() ) {
+            $(placeholder).text("");
+        }
+    });
+
+    $(document).on('focusout','.js--post-comment__input',function(event) {
+        let placeholder = $(this).find('.post-comment__placeholder');
+        if ( $(this).text().trim() == "" ) {
+            $(placeholder).text("Write a comment...");
+        }
+    });
+
+
+    //Comment EventListener
+    $(document).on("click",".js--comment", function(event) {
+        //select the comment button clicked
+        let theButton = event.target;
+        //get the encrypted post_id value and remove the trailing "=="
+        let post_id = $(theButton).closest(".post-entry").attr("data-pid");
+        let targetForm = `.js--pcf${post_id}`;
+        targetForm = targetForm.replace("==","");
+
+        //toggle the comment_form of the selected post
+        if ( $(targetForm).css("display") == "none" ) {
+            $(targetForm).css("display","flex");
+        }
+        else {
+            $(targetForm).css("display","none");
+        }
+        
+    });
+
     //POSTS////////////////////////////////////////////
     let start = 0;
     let limit = 7;
@@ -71,12 +141,18 @@ $(document).ready(function(){
     // });
 
 
+    $('.js--post-comment__input').keypress(function(e) {
+        if ( e.keyCode == 13 ) {  // detect the enter key
+            alert("submi the form");
+        }
+    });
+
     
 
 
 
 $(document).on("click", ".js--like", () =>{
-    $(event.target).children(".post-footer__icon").toggleClass("js--liked");
+    $(event.target).find(".post-footer__icon").toggleClass("js--liked");
 
     let theButton = event.target;
     
@@ -111,6 +187,14 @@ $(document).on("click", ".js--like", () =>{
 });
 
 
+
+//retrieve the comment details and submit the form
+function postComment() {
+    let hidden_textbox = $(".js--post-comment__body");
+}
+
+
+//update the posts and like stats in the user-details area
 function updatePostLike($el, $type, $operation) {
     if ( $type == "likes" ) {
         $likes = parseInt($el.split(":").pop());

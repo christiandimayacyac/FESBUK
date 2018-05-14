@@ -226,16 +226,12 @@ a:link {
   border: 1px solid rgba(204, 204, 204, 0.3);
   border-radius: 3px;
   margin-bottom: 2rem;
-  overflow: hidden;
+  padding: 1rem;
   box-shadow: 0 0.3rem 1rem rgba(0, 0, 0, 0.15); }
-
-.post-content {
-  padding: 1rem; }
 
 .post-header {
   display: flex;
   flex-direction: row;
-  position: relative;
   justify-content: flex-start;
   align-items: flex-start;
   margin-bottom: .8rem; }
@@ -250,37 +246,13 @@ a:link {
     justify-content: flex-start;
     flex: 1;
     font-size: 1.3rem; }
-  .post-header__options-btn {
+  .post-header__edit-btn {
     cursor: pointer;
-    align-self: flex-start;
-    color: #ccc;
-    font-size: 2rem;
-    line-height: 0;
-    background-color: transparent;
-    border: none; }
-    .post-header__options-btn:hover, .post-header__options-btn:focus {
-      outline: none;
+    color: #59a5d8;
+    text-decoration: none;
+    font-size: 1.3rem; }
+    .post-header__edit-btn:hover {
       color: #386fa4; }
-  .post-header__options-menu {
-    position: absolute;
-    top: 1.2rem;
-    right: 0;
-    border: 1px solid #ccc;
-    padding: .5rem 0;
-    border-radius: 3px;
-    list-style: none;
-    width: 8rem;
-    height: 5rem; }
-  .post-header__options-item {
-    display: block;
-    cursor: pointer;
-    font-size: 1.2rem;
-    line-height: 2rem;
-    color: #333;
-    padding-left: .5rem; }
-    .post-header__options-item:hover {
-      color: #fff;
-      background-color: #386fa4; }
   .post-header__author {
     color: #386fa4;
     flex: 0 0 20%;
@@ -320,49 +292,6 @@ a:link {
     height: 2rem;
     width: 2rem;
     margin-right: .5rem; }
-
-.post-comment__form {
-  display: none;
-  flex-direction: row;
-  justify-content: flex-start;
-  background-color: rgba(204, 204, 204, 0.3);
-  padding: 2rem;
-  padding-bottom: 1.6rem;
-  font-size: 1.3rem; }
-
-.post-comment__textbox {
-  align-self: flex-start;
-  background-color: #fff;
-  border-radius: 20px;
-  padding: .5rem 1rem;
-  margin-left: 1rem;
-  min-width: 56rem;
-  max-width: 56rem; }
-
-.post-comment__avatar {
-  width: 3.2rem;
-  height: 3.2rem;
-  border-radius: 100px;
-  border: 1px solid rgba(204, 204, 204, 0.7); }
-  .post-comment__avatar-link {
-    align-self: flex-start; }
-
-.post-comment__author-link {
-  display: none;
-  font-weight: 600; }
-
-.post-comment__input {
-  display: inline-block;
-  user-select: text;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  margin-left: .5rem;
-  width: 53rem; }
-  .post-comment__input:focus {
-    outline: none; }
-
-.post-comment__body {
-  display: none; }
 
 .js--liked {
   fill: #59a5d8; }
