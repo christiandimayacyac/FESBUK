@@ -101,6 +101,8 @@
                 $last_post_id = $this->con->lastInsertId();
                 //encrypt post_id to be used as data attribute
                 $post_id = getBase64EncodedValue(Constant::$postEncKey, $last_post_id);
+                //remove the 2 trailing "=" signs in the encrypted $post_id value to be used as a class name
+                $trimmed_post_id = substr_replace($post_id,"",-2);
 
                 //update num_posts in users' table
                 $num_posts = $this->User_Obj->getNumPosts();
@@ -127,36 +129,45 @@
                 //if POST is for user's own wall  craft a POST-ENTRY HTML
                 if ( $recipient == "none" ) {
                     $post_html = "<div class='post-entry' data-pid='$post_id'>
-                                    <div class='post-header'>
-                                        <img src='$profile_pic' class='post-header__img'>
-                                        <div class='post-header__details'>
-                                            <span class='post-header__author'>$post_author</span>
-                                            <span class='post-header__date-posted'>$time_label</span>
+                                    <div class='post-content'>
+                                        <div class='post-header'>
+                                            <img src='$profile_pic' class='post-header__img'>
+                                            <div class='post-header__details'>
+                                                <span class='post-header__author'>$post_author</span>
+                                                <span class='post-header__date-posted'>$time_label</span>
+                                            </div>
+                                            <button class='post-header__options-btn'>...</buton>
                                         </div>
-                                        <a href='#' class='post-header__edit-btn'>Edit</a>
-                                    </div>
 
-                                    <p class='post-body'>$post_body</p>
-                                    <div class='post-footer'>
-                                        <button class='post-footer__link js--like'>
-                                            <svg class='post-footer__icon'>
-                                                <use xlink:href='assets/img/sprite.svg#icon-thumbs-up'></use>
-                                            </svg>
-                                            Like
-                                        </button>
-                                        <button class='post-footer__link'>
-                                            <svg class='post-footer__icon'>
-                                                <use xlink:href='assets/img/sprite.svg#icon-message'></use>
-                                            </svg>
-                                            Comment
-                                        </button>
+                                        <p class='post-body'>$post_body</p>
+                                        <div class='post-footer'>
+                                            <button class='post-footer__link js--like'>
+                                                <svg class='post-footer__icon'>
+                                                    <use xlink:href='assets/img/sprite.svg#icon-thumbs-up'></use>
+                                                </svg>
+                                                Like
+                                            </button>
+                                            <button class='post-footer__link js--comment' aria-controls='post-comment-form'>
+                                                <svg class='post-footer__icon'>
+                                                    <use xlink:href='assets/img/sprite.svg#icon-message'></use>
+                                                </svg>
+                                                Comment
+                                            </button>
+                                        </div>
                                     </div>
+                                    <form class='post-comment__form js--pcf$trimmed_post_id' method='post'>
+                                            <a href='#' class='post-comment__avatar-link'><img src='$profile_pic' class='post-comment__avatar'></a>
+                                            <div class='post-comment__textbox'>
+                                                <span class='post-comment__author'><a href='#' class='post-comment__author-link'>$post_author</a></span>
+                                                <div class='post-comment__input js--post-comment__input' role='textbox' aria-multiline='true' contenteditable='true' data-placeholder='Write a comment...'><span class='post-comment__placeholder'>Write a comment...</span><textarea class='post-comment__body js--post-comment__body obj-hidden'></textarea></div>
+                                            </div>
+                                        </form>
                                   </div>";
 
                     return $post_html;
                 }
 
-            }
+            }               
             
             return "";
         }
@@ -260,9 +271,8 @@
                                         <form class='post-comment__form js--pcf$trimmed_post_id' method='post'>
                                             <a href='#' class='post-comment__avatar-link'><img src='$profile_pic' class='post-comment__avatar'></a>
                                             <div class='post-comment__textbox'>
-                                                <span class='post-comment__author'><a href='#' class='post-comment__author-link'>$post_author</a><span>
+                                                <span class='post-comment__author'><a href='#' class='post-comment__author-link'>$post_author</a></span>
                                                 <div class='post-comment__input js--post-comment__input' role='textbox' aria-multiline='true' contenteditable='true' data-placeholder='Write a comment...'><span class='post-comment__placeholder'>Write a comment...</span><textarea class='post-comment__body js--post-comment__body obj-hidden'></textarea></div>
-                                
                                             </div>
                                         </form>
                                     </div>";
@@ -336,7 +346,6 @@
                                                 </div>
                                                 <a href='#' class='post-header__edit-btn'>Edit</a>
                                             </div>
-
                                             <p class='post-body'>$post_body</p>
                                             <div class='post-footer'>
                                                 <button class='post-footer__link js--like'>

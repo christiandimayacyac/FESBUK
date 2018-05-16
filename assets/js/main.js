@@ -26,7 +26,13 @@ $(document).ready(function(){
         $("<ul class='post-header__options-menu'><li class='post-header__options-item'>Edit Post</li><li class='post-header__options-item'>Delete Post</li></ul>").insertAfter(event.target)
     });
 
+    //post-header__options-btn EventListener
+    $(document).on("focusout", ".post-header__options-btn", function(event){
+        $(this).next(".post-header__options-menu").hide();
+    });
+
     $(document).on('keypress','.js--post-comment__input',function(event) {
+        let this_input = event.target;
         let hidden_textarea = $(event.target).find(".js--post-comment__body");
         
         if (event.keyCode == 13) {  // detect the enter key
@@ -39,23 +45,29 @@ $(document).ready(function(){
                 let the_comment =   $(hidden_textarea).html();
                 let post_id = $(hidden_textarea).closest(".post-entry").attr("data-pid");
                 //send an AJAX request to save the new comment
-                console.log("to send: " + the_comment + " - " + post_id);
+                // console.log("to send: " + the_comment + " - " + post_id);
                 $.post("inc/ajax/fetch-comment-ajax.php",{post_id:post_id,the_comment:the_comment})
                     .done(function(result){
                         if ( result == "" ) {
                             console.log("No Comment");
                         }
                         else {
-                            console.log(result);
+                            // console.log(result);
+                            // $(this_input).closest(".post-entry").append(result);
+                            $(result).insertBefore($(this_input).closest(".post-comment__form"));
+                            //clear the input textbox
+                            $(this_input).text("");
+                            $(this_input).blur();
                         }
 
                     });
+                    
             }
             
         }
     });
 
-    $(document).on('focusin','.js--post-comment__input',function(event) {
+    $(document).on('keydown','.js--post-comment__input',function(event) {
         let placeholder = $(this).find('.post-comment__placeholder');
         if ( $(this).text() == $(placeholder).text() ) {
             $(placeholder).text("");
@@ -65,7 +77,10 @@ $(document).ready(function(){
     $(document).on('focusout','.js--post-comment__input',function(event) {
         let placeholder = $(this).find('.post-comment__placeholder');
         if ( $(this).text().trim() == "" ) {
-            $(placeholder).text("Write a comment...");
+            //remove current text
+            $(this).text("");  
+            //reinsert the deleted/modified html content
+            $(this).html("<span class='post-comment__placeholder'>Write a comment...</span><textarea class='post-comment__body js--post-comment__body obj-hidden'></textarea>");  
         }
     });
 
@@ -79,12 +94,16 @@ $(document).ready(function(){
         let targetForm = `.js--pcf${post_id}`;
         targetForm = targetForm.replace("==","");
 
-        //toggle the comment_form of the selected post
+        //toggle the comment_form and comment posts of the selected post
         if ( $(targetForm).css("display") == "none" ) {
             $(targetForm).css("display","flex");
+            //set the cursor inside the textbox
+            $(targetForm).find(".js--post-comment__input").focus();
+            $(targetForm).closest(".post-entry").find("[class*='js--pc']").show();
         }
         else {
             $(targetForm).css("display","none");
+            $(targetForm).closest(".post-entry").find("[class*='js--pc']").hide();
         }
         
     });
@@ -141,11 +160,7 @@ $(document).ready(function(){
     // });
 
 
-    $('.js--post-comment__input').keypress(function(e) {
-        if ( e.keyCode == 13 ) {  // detect the enter key
-            alert("submi the form");
-        }
-    });
+   
 
     
 
@@ -216,7 +231,8 @@ function submitPost(event) {
     $.post("inc/ajax/posts-ajax.php",{user_id:user_id, post_body:post_body})
     .done(function(result){
 
-        $(result).insertAfter(".wall__form");
+        // $(result).insertAfter(".wall__form");
+        $(result).insertAfter($(".post-entry").last(".post-comment__form"));
 
         //get the number of likes in the user details
         let num_posts = $(".user-details__num_posts").text();

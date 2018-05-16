@@ -69,6 +69,7 @@
         list-style: none;
         width: 8rem;
         height: 5rem;
+        box-shadow: 0 0.2rem 0.6rem rgba($color-black,.2);
     }
 
     &__options-item {
@@ -154,9 +155,11 @@
         font-size: 1.3rem;
     }
 
-    &__textbox {
+    &__textbox,
+    &__text {
         align-self: flex-start;
         background-color: $color-white;
+        border: 1px solid rgba($color-black,.15);
         border-radius: 20px;
         padding: .5rem 1rem;
         margin-left: 1rem;
@@ -186,7 +189,8 @@
         white-space: pre-wrap;
         word-wrap: break-word;
         margin-left: .5rem;
-        width: 53rem;
+        padding-right: 0.5rem;
+        // width: 53rem;
     
         &:focus {
             outline: none;
@@ -194,11 +198,42 @@
     }  
 
     &__placeholder {
-        
+        color: rgba($color-grey-darker,.5);
     }
-    
+
     &__body {
         display: none;
+    }
+
+    &__entry {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        background-color: rgba(204, 204, 204, 0.3);
+        padding: 2rem;
+        padding-bottom: 1.6rem;
+        font-size: 1.3rem;
+    }
+
+    &__author-name {
+        color: $color2;
+        font-weight: 700;
+    }
+
+    &__option-btn {
+        cursor: pointer;
+        display: inline-block;
+        align-self: flex-start;
+        margin-left: 1rem;
+        padding: .5rem;
+        font-size: 1.4rem;
+        font-weight: 700;
+    }
+
+    &__text {
+        border: none;
+        min-width: auto;
+        padding-right: .5rem;
     }
     
 }

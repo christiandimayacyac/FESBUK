@@ -17,8 +17,11 @@
         // $Comment_Obj = new Comment($con, $user_id);
         // $wall_posts = $Post_Obj->loadPosts($user_id, $limit, $start);
 
-        if ( $Comment_Obj->insertComment($comment_author, $comment_body, $post_id) ) {
-            echo "<span class='comment__content'>" . $_POST['the_comment'] . "</span>";
+        //get crafted Comment HTML content
+        $comment_html = $Comment_Obj->insertComment($comment_author, $comment_body, $post_id);
+        if ( $comment_html != "" ) {
+
+            echo $comment_html;
         }
     }
     else {

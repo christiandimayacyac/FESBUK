@@ -270,7 +270,8 @@ a:link {
     border-radius: 3px;
     list-style: none;
     width: 8rem;
-    height: 5rem; }
+    height: 5rem;
+    box-shadow: 0 0.2rem 0.6rem rgba(0, 0, 0, 0.2); }
   .post-header__options-item {
     display: block;
     cursor: pointer;
@@ -330,9 +331,10 @@ a:link {
   padding-bottom: 1.6rem;
   font-size: 1.3rem; }
 
-.post-comment__textbox {
+.post-comment__textbox, .post-comment__text {
   align-self: flex-start;
   background-color: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.15);
   border-radius: 20px;
   padding: .5rem 1rem;
   margin-left: 1rem;
@@ -357,12 +359,42 @@ a:link {
   white-space: pre-wrap;
   word-wrap: break-word;
   margin-left: .5rem;
-  width: 53rem; }
+  padding-right: 0.5rem; }
   .post-comment__input:focus {
     outline: none; }
 
+.post-comment__placeholder {
+  color: rgba(102, 102, 102, 0.5); }
+
 .post-comment__body {
   display: none; }
+
+.post-comment__entry {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  background-color: rgba(204, 204, 204, 0.3);
+  padding: 2rem;
+  padding-bottom: 1.6rem;
+  font-size: 1.3rem; }
+
+.post-comment__author-name {
+  color: #386fa4;
+  font-weight: 700; }
+
+.post-comment__option-btn {
+  cursor: pointer;
+  display: inline-block;
+  align-self: flex-start;
+  margin-left: 1rem;
+  padding: .5rem;
+  font-size: 1.4rem;
+  font-weight: 700; }
+
+.post-comment__text {
+  border: none;
+  min-width: auto;
+  padding-right: .5rem; }
 
 .js--liked {
   fill: #59a5d8; }
