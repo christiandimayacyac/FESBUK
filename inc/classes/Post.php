@@ -26,9 +26,11 @@
         private $posts_array = array();
 
         
-        public function __construct($con, int $user_id) {
+        public function __construct($con, $user_id) {
             $this->con = $con;
-            $this->User_Obj = new User($this->con, $user_id);
+            // var_dump("Post Class user_id: " . $user_id);
+            $decoded_user_id = getTrimmedDecodedValue(Constant::$userIdEncKey, $user_id);
+            $this->User_Obj = new User($this->con, $decoded_user_id);
 
             // $this->getPostsDetails();
         }
@@ -88,6 +90,7 @@
 
         public function submitPost(string $post_body, $recipient = "none", $post_type = 1) {  
             $date_posted = date("Y-m-d H:i:s");
+            
             $author_id = $this->User_Obj->user_id;
 
             if ( !$this->isEpmptyString($post_body) ) {
@@ -128,7 +131,7 @@
 
                 //if POST is for user's own wall  craft a POST-ENTRY HTML
                 if ( $recipient == "none" ) {
-                    $post_html = "<div class='post-entry' data-pid='$post_id'>
+                    $posts_html = "<div class='post-entry' data-pid='$post_id'>
                                     <div class='post-content'>
                                         <div class='post-header'>
                                             <img src='$profile_pic' class='post-header__img'>
@@ -164,7 +167,7 @@
                                         </form>
                                   </div>";
 
-                    return $post_html;
+                    return $posts_html;
                 }
 
             }               
@@ -202,7 +205,13 @@
                 $stmt = $this->con->prepare($sql_query);    
                 $stmt->execute(array(":user_id"=>$user_id));
                 
-                $post_html = "";
+                //initialize variables that will hold the html tags for posts and comments to be returned
+                $posts_html = "";
+                $comments_html = "";
+
+                //create an Object that will hold comments for each Post
+                $Comments_Obj = new Comment($this->con, false);
+
                 while ($post_entry = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     
                     //retrieve post id and body
@@ -241,7 +250,15 @@
                     //remove the 2 trailing "=" signs in the encrypted $post_id value to be used as a class name
                     $trimmed_post_id = substr_replace($post_id,"",-2);
 
-                    $post_html .= "<div class='post-entry' data-pid='$post_id'>
+                    //attached comments for the current post
+                    $current_comments = $Comments_Obj->loadComments($trimmed_post_id);
+                    var_dump($current_comments);
+
+                    
+                    
+                    
+
+                    $posts_html .= "<div class='post-entry' data-pid='$post_id'>
                                         <div class='post-content'>
                                             <div class='post-header'>
                                                 <img src='$profile_pic' class='post-header__img'>
@@ -276,10 +293,10 @@
                                             </div>
                                         </form>
                                     </div>";
-
+                                    $current_comments;
                 }
                 
-                return $post_html;
+                return $posts_html;
             }
 
         }
@@ -291,7 +308,7 @@
                 $stmt = $this->con->prepare($sql_query);    
                 $stmt->execute(array(":user_id"=>$user_id, ":post_recipient"=>$user_id));
                 
-                $post_html = "";
+                $posts_html = "";
                 while ($post_entry = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     
                     //retrieve post id and body
@@ -337,7 +354,7 @@
 
                     //if POST is for user's own wall  craft a POST-ENTRY HTML
                     // if ( $post_recipient == "none" ) {
-                        $post_html .= "<div class='post-entry' data-pid='$post_id'>
+                        $posts_html .= "<div class='post-entry' data-pid='$post_id'>
                                             <div class='post-header'>
                                                 <img src='$profile_pic' class='post-header__img'>
                                                 <div class='post-header__details'>
@@ -365,7 +382,7 @@
                     // }
                 }
                 
-                return $post_html;
+                return $posts_html;
             }
 
         }

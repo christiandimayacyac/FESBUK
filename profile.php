@@ -2,7 +2,7 @@
     include "inc/header.php"; 
 
     //create new User Object to access current user infos 
-    $Cur_user = new User($con, $_SESSION['user_id']);
+    $Cur_user = new User($con, getTrimmedDecodedValue(Constant::$userIdEncKey, $_SESSION['user_id']));
 ?>
 <div class="container">
     <div class="row">

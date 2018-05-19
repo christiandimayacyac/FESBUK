@@ -71,6 +71,31 @@
 		return $decodedData;
 	}
 
+	function getTrimmedEncodedValue($key, $value) {
+		$encoded_string = getBase64EncodedValue($key, $value);
+		//count the number of "=" and append the result to the string after removing the "=" symbol
+		$num_of_uquals = substr_count($encoded_string, "=" );
+		$encoded_string = str_replace("=", "", $encoded_string);
+		$encoded_string.= "$num_of_uquals";
+				
+		return $encoded_string;
+	}
+
+	function getTrimmedDecodedValue($key, $value) {
+		//get the last character of the string that denotes the number of "=" to be appended
+		
+		$num_of_uquals = substr($value, -1);
+		$value = substr_replace($value, "", -1, $num_of_uquals);
+		if ( $num_of_uquals > 0 ) {
+			for ($i=1; $i <= $num_of_uquals; $i++) {
+				$value .= "=";
+			}
+		}
+		$encoded_string = getBase64DecodedValue($key, $value);
+
+		return $encoded_string;
+	}
+
 	//checks if the save cookie named: "rememberFesbuk" is valid
     function isCookieValid(){
 		
@@ -93,7 +118,7 @@
 					$id = $rs['user_id'];
 					$username = $rs['user_name'];
 					
-					$_SESSION['user_id'] = $id;
+					$_SESSION['user_id'] = getTrimmedEncodedValue(Constant::$userIdEncKey, $id);
 					$_SESSION['username'] = $username;
 					$isValid = true;
 				}

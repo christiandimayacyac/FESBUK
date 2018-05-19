@@ -25,6 +25,7 @@
 		public static $userNameEncKey = "u$3rn@m3k3y";
 		public static $userIdEncKey = "u$3r1dk3y";
 		public static $postEncKey = "p0stk3y";
+		public static $commentEncKey = "c0mm3ntk3y";
 	
 		//User-defined Minimum and Maxmimum 
 		// public static $un_min_max_id = array("min"=>4, "max"=>25, "id"=>"Username");

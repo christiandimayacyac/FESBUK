@@ -6,7 +6,7 @@
     $wall_posts = "";
 
     if ( isset($_POST['the_comment']) && isset($_POST['post_id']) && isset($_SESSION['user_id']) ) {
-        $comment_author = $_SESSION['user_id'];
+        $comment_author = getTrimmedDecodedValue(Constant::$userIdEncKey,$_SESSION['user_id']);
         $comment_body = $_POST['the_comment'];
         $post_id = $_POST['post_id'];
 

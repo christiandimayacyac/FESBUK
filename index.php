@@ -1,9 +1,11 @@
 <?php 
     include "inc/header.php"; 
+    include_once "inc/classes/Constant.php";
 
     //create new User Object to access current user infos 
-    $Cur_user = new User($con, $_SESSION['user_id']);
-    $User_posts = new Post($con, $_SESSION['user_id']);
+    $user_id = getTrimmedDecodedValue(Constant::$userIdEncKey, $_SESSION['user_id']);
+    $Cur_user = new User($con, $user_id );
+    $User_posts = new Post($con, $user_id );
 ?>
 <div class="container">
     <div class="row">
@@ -41,11 +43,11 @@
                 <div class="wall">
                     <form action="#" class="wall__form">
                         <textarea class="wall__textarea js--wall__textarea" name="wall__textarea" placeholder="What do you have in mind today?"></textarea>
-                        <input type="text" class="js--wall__input" value="<?php echo $Cur_user->user_id; ?>" hidden>
+                        <input type="text" class="js--wall__input" value="<?php echo getTrimmedEncodedValue(Constant::$userIdEncKey, $Cur_user->user_id); ?>" hidden>
                         <button class="wall__submit js--wall__submit" name="wall__submit">Post</button>
                     </form>
                     <div class="wall__posts"></div>
-                    <!-- <?php $User_posts->loadPosts($_SESSION['user_id'], 7, 0); ?> -->
+                    <!-- <?php $User_posts->loadPosts(getTrimmedDecodedValue(Constant::$userIdEncKey, $_SESSION['user_id']), 7, 0); ?> -->
                     <div class="loading__info"></div>
                 </div>
 

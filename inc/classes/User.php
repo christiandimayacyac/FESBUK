@@ -19,9 +19,6 @@
         public $reg_time;
         public $num_posts;
         public $num_likes;
-
-
-        //initialize a property that will hold errors
         
 
         public function __construct($con, $user_id=0)  {
@@ -61,7 +58,8 @@
                $stmt->execute(array(':user_name'=>$u_name, ':first_name'=>$f_name, ':last_name'=>$l_name, ':email'=>$email, ':hashed_password'=>$hashed_pwd));
 
                if ( $stmt->rowCount() == 1 ) {
-                    $this->createUserSession('user_id', $this->con->lastInsertId());
+                    $lastInsertedId = getTrimmedEncodedValue(Constant::$userIdEncKey, $this->con->lastInsertId());
+                    $this->createUserSession('user_id', $lastInsertedId);
                     $this->createUserSession('user_name', "$u_name");
                }
             }
@@ -91,8 +89,12 @@
                 if ( password_verify($password, $rs['password']) ) {
                     
                     $this->setClassProperties($rs);
-
-                    $this->createUserSession('user_id', $rs['user_id']);
+                    //encrypt the user_id
+                    // $encryptedTrimmedUserId = getTrimmedEncodedValue(Constant::$userIdEncKey, $rs['user_id']);
+                    $encryptedTrimmedUserId = getTrimmedEncodedValue(Constant::$userIdEncKey, $rs['user_id']);
+                    //create User Sessions
+                    // $this->createUserSession('user_id', $encryptedTrimmedUserId);
+                    $this->createUserSession('user_id', $encryptedTrimmedUserId);
                     $this->createUserSession('user_name', $rs['user_name']);
 
                     $login_success = true;

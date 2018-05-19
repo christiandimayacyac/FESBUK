@@ -9,7 +9,7 @@
 
         //decode the encrypted post_id from the POST data
         $decoded_pid = getBase64DecodedValue(Constant::$postEncKey, $_POST['post_id']);
-        $user_id = $_SESSION['user_id'];
+        $user_id = getTrimmedDecodedValue(Constant::$userIdEncKey, $_SESSION['user_id']);
 
         //create like,post and user objects
         $UserObj = new User($con, $user_id);

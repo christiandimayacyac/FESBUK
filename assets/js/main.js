@@ -11,13 +11,19 @@ $(document).ready(function(){
     //EventListeners/////////////////////////////////////
 
     //Logout EventListener
-    document.querySelector(".user-nav__logout").addEventListener('click', () => window.location.href="logout.php");
-
+    if ( document.querySelector(".user-nav__logout") ) {
+        document.querySelector(".user-nav__logout").addEventListener('click', () => window.location.href="logout.php");
+    }
+    
     //Post EventListener
-    document.querySelector(".js--wall__submit").addEventListener('click', event => {
-        event.preventDefault();
-        submitPost();
-    });
+    if ( document.querySelector(".js--wall__submit") ) {
+        document.querySelector(".js--wall__submit").addEventListener('click', event => {
+            event.preventDefault();
+            submitPost();
+        });
+    }
+
+    
 
     //Post Options Button EventListener
     $(document).on("click", ".post-header__options-btn", function(event) {
@@ -44,8 +50,10 @@ $(document).ready(function(){
                 $(hidden_textarea).html($(event.target).text());
                 let the_comment =   $(hidden_textarea).html();
                 let post_id = $(hidden_textarea).closest(".post-entry").attr("data-pid");
+
                 //send an AJAX request to save the new comment
-                // console.log("to send: " + the_comment + " - " + post_id);
+                console.log("to send: " + the_comment + " - " + post_id);
+                
                 $.post("inc/ajax/fetch-comment-ajax.php",{post_id:post_id,the_comment:the_comment})
                     .done(function(result){
                         if ( result == "" ) {
@@ -115,6 +123,7 @@ $(document).ready(function(){
 
     //function that sends ajax request to fetch-posts-ajax.php to pull posts from the database
     function loadUserPosts() {
+        // console.log("loading user posts");
         $.post("inc/ajax/fetch-posts-ajax.php",{start:start, limit:limit})
             .done(function(result){
                 if ( result == "" ) {
@@ -122,17 +131,16 @@ $(document).ready(function(){
                     $(".loading__info").hide();
                 }
                 else {
+                    // console.log(result);
                     ready_to_fetch = true;
                     $(".wall__posts").append(result);
                 }
             });
     }
-
     if ( ready_to_fetch ) {
         ready_to_fetch = false;
         loadUserPosts();
     }
-
 
     $(window).scroll(function(){
         if ( ($(window).scrollTop() + $(window).height() > $(".wall").height() + $("header").height() + 50) && ready_to_fetch == true ) {
@@ -151,20 +159,6 @@ $(document).ready(function(){
     
 });
     
-
-    //Like EventListener
-    // document.querySelector(".js--like").addEventListener('click', event => {
-    //     event.preventDefault();
-    //     $(event.target).children(".post-footer__icon").toggleClass("js--liked");
-    //     // setLike(event);
-    // });
-
-
-   
-
-    
-
-
 
 $(document).on("click", ".js--like", () =>{
     $(event.target).find(".post-footer__icon").toggleClass("js--liked");
@@ -203,6 +197,8 @@ $(document).on("click", ".js--like", () =>{
 
 
 
+
+
 //retrieve the comment details and submit the form
 function postComment() {
     let hidden_textbox = $(".js--post-comment__body");
@@ -228,17 +224,24 @@ function submitPost(event) {
     let post_body = $(".js--wall__textarea").val();
     let user_id = $(".js--wall__input").val();
 
+    // console.log("to send: " + post_body + " - " + user_id);
+
     $.post("inc/ajax/posts-ajax.php",{user_id:user_id, post_body:post_body})
     .done(function(result){
-
-        // $(result).insertAfter(".wall__form");
-        $(result).insertAfter($(".post-entry").last(".post-comment__form"));
+        //check if a post-entry exists; append to it if a post entry exists; otherwise insert before the loading_info div
+        if ( document.querySelector(".post-entry") != null ) {
+            $(result).insertAfter($(".post-entry").last(".post-comment__form"));
+        }
+        else {
+            $(".wall__posts").append(result);
+        }
 
         //get the number of likes in the user details
         let num_posts = $(".user-details__num_posts").text();
         updatePostLike(num_posts,"posts", "increment")
 
         $(".js--wall__textarea").val("");
+        
     });
 }
 
