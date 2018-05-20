@@ -34,7 +34,7 @@
                 //retrieve user's profile pic
                 $profile_pic = "assets/img/uploads/" . $this->User_Obj->profile_pic;
                 //retrieve post author's name
-                $comment_author = "{$this->User_Obj->first_name} {$this->User_Obj->last_name}";
+                $comment_author_name = "{$this->User_Obj->first_name} {$this->User_Obj->last_name}";
 
                 try{
                     $sql_insert = "INSERT INTO comments (comment_author, comment_body, post_id, date_posted, date_edited) VALUES (:comment_author, :comment_body, :post_id, :date_posted, :date_edited)";
@@ -48,7 +48,7 @@
                                             <a href='#' class='post-comment__avatar-link'><img src='$profile_pic' class='post-comment__avatar'></a>
                                             <div class='post-comment__text'>
                                                 
-                                                <div class='post-comment__input js--post-comment__input' role='textbox' aria-multiline='true' contenteditable='false'><textarea class='post-comment__body js--post-comment__body obj-hidden'>$comment_body</textarea><span class='post-comment__author'><a href='#' class='post-comment__author-link--display'>$comment_author</a></span>&nbsp;$comment_body</div>
+                                                <div class='post-comment__input js--post-comment__input' role='textbox' aria-multiline='true' contenteditable='false'><textarea class='post-comment__body js--post-comment__body obj-hidden'>$comment_body</textarea><span class='post-comment__author'><a href='#' class='post-comment__author-link--display'>$comment_author_name</a></span>&nbsp;$comment_body</div>
                                             </div>
                                             <div class='post-comment__option-btn'>...</div>
                                         </div>
@@ -71,12 +71,14 @@
         }
 
         public function loadComments($post_id) {
+            $decrypted_post_id = getTrimmedDecodedValue(Constant::$postEncKey, $post_id);
             $comments_html = "";
 
-            if ( ($post_id > 0 && $post_author > 0) || 1 == 1 ) {
+            // if ( ($post_id > 0 && $post_author > 0) || 1 == 1 ) {
+            if ( $decrypted_post_id > 0  ) {
                 $sql_query = "SELECT * FROM comments WHERE post_id = :post_id";
                 $stmt = $this->con->prepare($sql_query);
-                $stmt->execute(array(":post_id"=>$post_id) );
+                $stmt->execute(array(":post_id"=>$decrypted_post_id) );
 
                 while ( $rs = $stmt->fetch(PDO::FETCH_ASSOC) ) {
                     // $comments_array = array_merge($comments_array, $rs);
@@ -90,32 +92,35 @@
                             //Create a user object to get the current User Profile Pic and Name of the comment author
                             $this->User_Obj = new User($this->con, $rs['comment_author']);
                             //get the comment author details
-                            $profile_pic = $this->User_Obj->profile_pic; 
-                            $comment_author = "{$this->User_Obj->first_name} {$this->User_Obj->last_name}";
+                            $profile_pic = $this->User_Obj->upload_path . $this->User_Obj->profile_pic; 
+                            $comment_author_name = "{$this->User_Obj->first_name} {$this->User_Obj->last_name}";
                             $this->User_Obj->profile_pic; 
-                            $this->User_Obj->profile_pic; 
-
-
-                            $comments_html.= "<div class='comment-entry' data-cid='$comment_id'>
-                                                <div class='comment-content'>
-                                                    <div class='comment-header'>
-                                                        <img src='$profile_pic' class='comment-header__img'>
-                                                        <div class='comment-header__details'>
-                                                            <span class='comment-header__author'>$comment_author</span>
-                                                            <span class='comment-header__date-posted'>$time_label</span>
-                                                        </div>
-                                                        <button class='comment-header__options-btn'>...</buton>
-                                                    </div>
-
-                                                    <p class='comment-body'>$comment_body</p>
-                                                    
-                                            </div>
-
-
-                                            
                             
-                            ";
-                            var_dump($comments_html);
+
+                            $comments_html .= "<div class='post-comment__entry js--pc$comment_id' method='post'>
+                                                    <a href='#' class='post-comment__avatar-link'><img src='$profile_pic' class='post-comment__avatar'></a>
+                                                    <div class='post-comment__text'>
+                                                        <div class='post-comment__input js--post-comment__input' role='textbox' aria-multiline='true' contenteditable='false'><textarea class='post-comment__body js--post-comment__body obj-hidden'>$comment_body</textarea><span class='post-comment__author'><a href='#' class='post-comment__author-link--display'>$comment_author_name</a></span>&nbsp;$comment_body</div>
+                                                    </div>
+                                                    <div class='post-comment__option-btn'>...</div>
+                                            </div>";
+
+                            // <div class='comment-entry' data-cid='$comment_id'>
+                            //                     <div class='comment-content'>
+                            //                         <div class='comment-header'>
+                            //                             <img src='$profile_pic' class='comment-header__img'>
+                            //                             <div class='comment-header__details'>
+                            //                                 <span class='comment-header__author'>$comment_author</span>
+                            //                                 <span class='comment-header__date-posted'>$time_label</span>
+                            //                             </div>
+                            //                             <button class='comment-header__options-btn'>...</buton>
+                            //                         </div>
+                            //                         <p class='comment-body'>$comment_body</p>
+                            //                     </div>
+                            //                 </div>
+
+
+
 
                             // <div class='comment-footer'>
                             //             <button class='comment-footer__link js--like'>

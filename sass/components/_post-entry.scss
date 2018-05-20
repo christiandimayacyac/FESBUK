@@ -1,4 +1,5 @@
-.post-entry {
+.post-entry,
+.comment-entry {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -9,11 +10,13 @@
     box-shadow: 0 0.3rem 1rem rgba(0, 0, 0, 0.15);
 }
 
-.post-content {
+.post-content, 
+.comment-content {
     padding: 1rem;
 }
 
-.post-header {
+.post-header,
+.comment-header {
     display: flex;
     flex-direction: row;
     position: relative;
@@ -99,7 +102,16 @@
     }
 }
 
-.post-body {
+.comment-header__img {
+    flex: 0 0 3rem;
+    border-radius: 3px;
+    margin-right: 1rem;
+    height: 4rem;
+    width: 4rem;
+}
+
+.post-body,
+.comment-body {
     padding: .5rem 0 1rem 0;
     font-size: 1.4rem;
     border-bottom: 1px solid rgba($color-black,0.1);
@@ -139,7 +151,6 @@
         margin-right: .5rem;
     }
     
-
 }
 
 .post-comment {
@@ -163,8 +174,12 @@
         border-radius: 20px;
         padding: .5rem 1rem;
         margin-left: 1rem;
-        min-width: 56rem;
+        min-width: 39rem;
         max-width: 56rem;
+    }
+
+    &__textbox--input {
+        width: 100%;
     }
 
     &__avatar {
@@ -237,8 +252,6 @@
     }
     
 }
-
-
 
 .js--liked {
     fill: $color3;

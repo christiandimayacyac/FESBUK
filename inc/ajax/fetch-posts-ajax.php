@@ -8,10 +8,11 @@
     if ( isset($_POST['start']) && isset($_POST['limit']) && isset($_SESSION['user_id']) ) {
         $limit = $_POST['limit'];
         $start = $_POST['start'];
-        $user_id = getTrimmedDecodedValue(Constant::$userIdEncKey, $_SESSION['user_id']);
+        // $user_id = getTrimmedDecodedValue(Constant::$userIdEncKey, $_SESSION['user_id']);
+        $user_id = $_SESSION['user_id'];
 
         // $Post_Obj = new Post($user_id, $limit, $start);
-        $Post_Obj = new Post($con, $user_id);
+        $Post_Obj = new Post($con, $_SESSION['user_id']);
         $wall_posts = $Post_Obj->loadPosts($user_id, $limit, $start);
     }
 

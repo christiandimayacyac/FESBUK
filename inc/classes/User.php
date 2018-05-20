@@ -19,6 +19,7 @@
         public $reg_time;
         public $num_posts;
         public $num_likes;
+        public $upload_path = "assets/img/uploads/";
         
 
         public function __construct($con, $user_id=0)  {

@@ -160,7 +160,7 @@
                                     </div>
                                     <form class='post-comment__form js--pcf$trimmed_post_id' method='post'>
                                             <a href='#' class='post-comment__avatar-link'><img src='$profile_pic' class='post-comment__avatar'></a>
-                                            <div class='post-comment__textbox'>
+                                            <div class='post-comment__textbox post-comment__textbox--input'>
                                                 <span class='post-comment__author'><a href='#' class='post-comment__author-link'>$post_author</a></span>
                                                 <div class='post-comment__input js--post-comment__input' role='textbox' aria-multiline='true' contenteditable='true' data-placeholder='Write a comment...'><span class='post-comment__placeholder'>Write a comment...</span><textarea class='post-comment__body js--post-comment__body obj-hidden'></textarea></div>
                                             </div>
@@ -176,7 +176,7 @@
         }
 
         public function loadPosts($user_id, $limit, $start) {
-            
+            $user_id = getTrimmedDecodedValue(Constant::$userIdEncKey, $user_id);
             if ( $user_id > 0 ) {
                 //SELECT ALL POSTS 
                 $sql_query = "SELECT DISTINCT
@@ -237,6 +237,7 @@
                         $profile_pic = "assets/img/uploads/" . $this->User_Obj->profile_pic;
                         //retrieve post author's name
                         $post_author = "{$this->User_Obj->first_name} {$this->User_Obj->last_name}";
+                        // var_dump($this->User_Obj);
                     }
                     else {
                         //create new user object for the friend's details
@@ -252,11 +253,6 @@
 
                     //attached comments for the current post
                     $current_comments = $Comments_Obj->loadComments($trimmed_post_id);
-                    var_dump($current_comments);
-
-                    
-                    
-                    
 
                     $posts_html .= "<div class='post-entry' data-pid='$post_id'>
                                         <div class='post-content'>
@@ -285,15 +281,17 @@
                                                 </button>
                                             </div>
                                         </div>
+                                        $current_comments
                                         <form class='post-comment__form js--pcf$trimmed_post_id' method='post'>
                                             <a href='#' class='post-comment__avatar-link'><img src='$profile_pic' class='post-comment__avatar'></a>
-                                            <div class='post-comment__textbox'>
+                                            <div class='post-comment__textbox post-comment__textbox--input'>
                                                 <span class='post-comment__author'><a href='#' class='post-comment__author-link'>$post_author</a></span>
                                                 <div class='post-comment__input js--post-comment__input' role='textbox' aria-multiline='true' contenteditable='true' data-placeholder='Write a comment...'><span class='post-comment__placeholder'>Write a comment...</span><textarea class='post-comment__body js--post-comment__body obj-hidden'></textarea></div>
                                             </div>
                                         </form>
                                     </div>";
-                                    $current_comments;
+                                    
+                                    
                 }
                 
                 return $posts_html;

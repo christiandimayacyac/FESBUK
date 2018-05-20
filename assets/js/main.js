@@ -60,7 +60,7 @@ $(document).ready(function(){
                             console.log("No Comment");
                         }
                         else {
-                            // console.log(result);
+                            console.log(result);
                             // $(this_input).closest(".post-entry").append(result);
                             $(result).insertBefore($(this_input).closest(".post-comment__form"));
                             //clear the input textbox
@@ -105,13 +105,18 @@ $(document).ready(function(){
         //toggle the comment_form and comment posts of the selected post
         if ( $(targetForm).css("display") == "none" ) {
             $(targetForm).css("display","flex");
+            $(targetForm).closest(".post-entry").find(".post-comment__entry").css("display", "flex");
+            
             //set the cursor inside the textbox
             $(targetForm).find(".js--post-comment__input").focus();
             $(targetForm).closest(".post-entry").find("[class*='js--pc']").show();
+            
         }
         else {
             $(targetForm).css("display","none");
             $(targetForm).closest(".post-entry").find("[class*='js--pc']").hide();
+            // $(targetForm).closest(".post-comment__entry").css("display", "none");
+
         }
         
     });
