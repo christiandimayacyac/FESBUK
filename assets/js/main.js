@@ -235,7 +235,9 @@ function submitPost(event) {
     .done(function(result){
         //check if a post-entry exists; append to it if a post entry exists; otherwise insert before the loading_info div
         if ( document.querySelector(".post-entry") != null ) {
-            $(result).insertAfter($(".post-entry").last(".post-comment__form"));
+            $(result).insertBefore($(".post-entry").first(".post-comment__form"));
+            // $(result).insertAfter($(".wall__posts"));
+            // $(".wall__posts").append(result);
         }
         else {
             $(".wall__posts").append(result);
