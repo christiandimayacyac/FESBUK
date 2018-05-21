@@ -6,6 +6,9 @@
     $user_id = getTrimmedDecodedValue(Constant::$userIdEncKey, $_SESSION['user_id']);
     $Cur_user = new User($con, $user_id );
     $User_posts = new Post($con, $user_id );
+
+    Page::ForceLogout();
+
 ?>
 <div class="container">
     <div class="row">
@@ -39,7 +42,7 @@
                 </div>
             </div>
             <main class="main">
-                Welcome <?php echo ($_SESSION['user_name']); ?>
+                <!-- Welcome <?php var_dump($_COOKIE); ?> -->
                 <div class="wall">
                     <form action="#" class="wall__form">
                         <textarea class="wall__textarea js--wall__textarea" name="wall__textarea" placeholder="What do you have in mind today?"></textarea>

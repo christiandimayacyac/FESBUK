@@ -74,7 +74,7 @@
         
 
 
-        public function login($user_name, $password) {
+        public function login($user_name, $password, $keep_login="") {
 
             $login_success = false;
             $this->clearErrors();
@@ -93,11 +93,16 @@
                     //encrypt the user_id
                     // $encryptedTrimmedUserId = getTrimmedEncodedValue(Constant::$userIdEncKey, $rs['user_id']);
                     $encryptedTrimmedUserId = getTrimmedEncodedValue(Constant::$userIdEncKey, $rs['user_id']);
+                    //if keep login_chkbox is checked create a user cookie with a 5 days expiry
+                    if ( $keep_login == "yes" ) {
+                        setUserCookie($rs['user_name']); 
+                    }
                     //create User Sessions
                     // $this->createUserSession('user_id', $encryptedTrimmedUserId);
                     $this->createUserSession('user_id', $encryptedTrimmedUserId);
                     $this->createUserSession('user_name', $rs['user_name']);
-
+                    
+                    
                     $login_success = true;
                 }
                 else {

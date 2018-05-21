@@ -12,7 +12,7 @@
     Page::ForceLogin();
 
     // $User = new User($_SESSION['user_id']);
-    
+    var_dump($_COOKIE);
 ?>
 
 <!DOCTYPE html>
@@ -65,8 +65,8 @@
                                 <label for="login_password" class="login-form__label">Password</label>
                             </div>
                             <div class="login-form__group">
-                                <input type="checkbox" class="login-form__chkbox" name="login_chkbox" id="login_chkbox">
-                                <label for="login_chkbox" class="login-form__label" value="yes">Keep me logged in</label>
+                                <input type="checkbox" class="login-form__chkbox" name="login_chkbox" id="login_chkbox"  value="yes">
+                                <label for="login_chkbox" class="login-form__label">Keep me logged in</label>
                             </div>
                             <button type="submit" class="btn login-form__btn js--btn-signup" name="login_submit">Sign in</button>
                             <span class="login-form__footer">Don't have an account yet? <a href="#" class="login-form__switch-btn js--switch">Sign Up</a></span>

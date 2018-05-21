@@ -10,6 +10,8 @@
         //check if rememberme checkbox is checked and assign value to a variable
         $remember_me = ( isset($_POST['login_chkbox']) ) ? $_POST['login_chkbox'] : "";
 
+        echo "remember value: ". $_POST['login_chkbox'];
+
         $user_info = array (
             array("Username" => $_POST['login_user_name'],"min"=>3,"max"=>15),
             array("Password" => $_POST['login_password'],"min"=>8,"max"=>20)
@@ -21,7 +23,7 @@
         $isValid = $Account->validateAll($con, $user_info, 'login');
 
         if ( $isValid ) {
-            $login_success = $Account->login($_POST['login_user_name'],$_POST['login_password'] );
+            $login_success = $Account->login($_POST['login_user_name'], $_POST['login_password'], $remember_me);
 
             
         }

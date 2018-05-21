@@ -35,6 +35,7 @@
 
 		//set a cookie named: "rememberFesbuk" and will expire after 30days
 		setcookie("rememberFesbuk", $encrypted_cookie_value, time()+60*60*24*100,"/");
+		return;
 	}
 
 
@@ -97,19 +98,17 @@
 	}
 
 	//checks if the save cookie named: "rememberFesbuk" is valid
-    function isCookieValid(){
+    function isCookieValid($con){
 		
 		$isValid = false;
 		
 		if ( isset($_COOKIE['rememberFesbuk'])) {
-			$decryptedCookie = base64_decode($_COOKIE['rememberFesbuk']);
-			$user_name = explode(Constant::$userNameEncKey, $decryptedCookie);
-			$user_name = $user_name[1];
+			$user_name = getBase64DecodedValue(Constant::$userNameEncKey, $_COOKIE['rememberFesbuk']);
 			
 			try{
 				$sqlQuery = "SELECT * FROM users WHERE user_name = :user_name";
 				
-				$stmtQuery = $db->prepare($sqlQuery);
+				$stmtQuery = $con->prepare($sqlQuery);
 				
 				$stmtQuery->execute(array(':user_name'=>$user_name));
 				
@@ -119,7 +118,7 @@
 					$username = $rs['user_name'];
 					
 					$_SESSION['user_id'] = getTrimmedEncodedValue(Constant::$userIdEncKey, $id);
-					$_SESSION['username'] = $username;
+					$_SESSION['user_name'] = $username;
 					$isValid = true;
 				}
 				else{
@@ -269,7 +268,7 @@
 	function signOut(){
 		// remove all session variables
 		session_unset($_SESSION['id']);
-		session_unset($_SESSION['username']);
+		session_unset($_SESSION['user_name']);
 		
 		//destroy all cookies
 		if ( isset($_COOKIE['rememberMeCookie']) ){
@@ -408,7 +407,7 @@
 	function prepLogin($id, $username, $remember){
 		//create session variables
 		$_SESSION['id'] = $id;
-		$_SESSION['username'] = $username;
+		$_SESSION['user_name'] = $username;
 		
 		//add session security
 		setFingerprint();
