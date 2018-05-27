@@ -394,13 +394,19 @@ a:link {
   display: none; }
 
 .post-comment__entry {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
   background-color: rgba(204, 204, 204, 0.3);
   padding: 2rem;
   padding-bottom: 1.6rem;
   font-size: 1.3rem; }
+
+.post-comment__content {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start; }
+
+.post-comment__time-label {
+  color: #666;
+  margin-left: 5.8rem; }
 
 .post-comment__author-name {
   color: #386fa4;
@@ -419,6 +425,17 @@ a:link {
   border: none;
   min-width: auto;
   padding-right: .5rem; }
+
+.more_comments {
+  color: #59a5d8;
+  cursor: pointer;
+  border: none;
+  border-top: 1px solid rgba(51, 51, 51, 0.1);
+  background-color: rgba(204, 204, 204, 0.3);
+  padding: 1rem;
+  text-align: left; }
+  .more_comments:focus {
+    outline: none; }
 
 .js--liked {
   fill: #59a5d8; }

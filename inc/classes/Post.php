@@ -42,51 +42,7 @@
             return ( $raw_str === "" ) ? true : false;
         }
 
-        private function getPostTimeInterval($date_time_diff) {
-            switch (true) {
-                case $date_time_diff->y == 1:
-                    $time_label = " a year ago";
-                    break;
-                case $date_time_diff->y > 1:
-                    $time_label = "$date_time_diff->y years ago";
-                    break;
-                case $date_time_diff->m == 1:
-                    $time_label = " a month ago";
-                    break;
-                case $date_time_diff->m > 1:
-                    $time_label = "$date_time_diff->m months ago";
-                    break;
-                case $date_time_diff->d == 1:
-                    $time_label = " a day ago";
-                    break;
-                case $date_time_diff->d > 1:
-                    $time_label = "$date_time_diff->d days ago";
-                    break;
-                case $date_time_diff->h == 1:
-                    $time_label = " an hour ago";
-                    break;
-                case $date_time_diff->h > 1:
-                    $time_label = "$date_time_diff->h hours ago";
-                    break;
-                case $date_time_diff->i == 1:
-                    $time_label = " a minute ago";
-                    break;
-                case $date_time_diff->i > 1:
-                    $time_label = "$date_time_diff->i  minutes ago";
-                    break;
-                case $date_time_diff->s == 1:
-                    $time_label = " a second ago";
-                    break;
-                case $date_time_diff->s > 1:
-                    $time_label = " $date_time_diff->s seconds ago";
-                    break;
-                default:
-                    $time_label = " just now";
-                    break;
-            }
-
-            return $time_label;
-        }
+        
 
         public function submitPost(string $post_body, $recipient = "none", $post_type = 1) {  
             $date_posted = date("Y-m-d H:i:s");
@@ -125,7 +81,7 @@
                 $end_date_time = new DateTime($current_date_time);
                 $date_time_diff = $start_date_time->diff($end_date_time);
 
-                $time_label = $this->getPostTimeInterval($date_time_diff);
+                $time_label = getPostTimeInterval($date_time_diff);
 
                 
 
@@ -211,6 +167,8 @@
 
                 //create an Object that will hold comments for each Post
                 $Comments_Obj = new Comment($this->con, false);
+                $com_start = 0;
+                $com_limit = 4;
 
                 while ($post_entry = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     
@@ -225,7 +183,7 @@
                     $date_time_diff = $start_date_time->diff($end_date_time);
 
 
-                    $time_label = $this->getPostTimeInterval($date_time_diff);
+                    $time_label = getPostTimeInterval($date_time_diff);
 
                     //check if current_user liked the current post; add "js--liked" class to like button
                     $Like_Obj = new Like($this->con, $post_entry['post_id'], $user_id);
@@ -252,7 +210,7 @@
                     $trimmed_post_id = substr_replace($post_id,"",-2);
 
                     //attached comments for the current post
-                    $current_comments = $Comments_Obj->loadComments($trimmed_post_id);
+                    $current_comments = $Comments_Obj->loadComments($trimmed_post_id, $com_start, $com_limit);
 
                     $posts_html .= "<div class='post-entry' data-pid='$post_id'>
                                         <div class='post-content'>
@@ -282,7 +240,7 @@
                                             </div>
                                         </div>
                                         $current_comments
-                                        <form class='post-comment__form js--pcf$trimmed_post_id' method='post'>
+                                        <form class='post-comment__form js--comfrm$trimmed_post_id' method='post'>
                                             <a href='#' class='post-comment__avatar-link'><img src='$profile_pic' class='post-comment__avatar'></a>
                                             <div class='post-comment__textbox post-comment__textbox--input'>
                                                 <span class='post-comment__author'><a href='#' class='post-comment__author-link'>$post_author</a></span>
@@ -320,7 +278,7 @@
                     $date_time_diff = $start_date_time->diff($end_date_time);
 
 
-                    $time_label = $this->getPostTimeInterval($date_time_diff);
+                    $time_label = getPostTimeInterval($date_time_diff);
 
                     //check if current_user liked the current post; add "js--liked" class to like button
                     $Like_Obj = new Like($this->con, $post_entry['post_id'], $user_id);

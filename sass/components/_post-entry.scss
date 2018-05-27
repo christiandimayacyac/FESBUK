@@ -221,13 +221,22 @@
     }
 
     &__entry {
-        display: flex;
-        flex-direction: row;
-        justify-content: flex-start;
+        
         background-color: rgba(204, 204, 204, 0.3);
         padding: 2rem;
         padding-bottom: 1.6rem;
         font-size: 1.3rem;
+    }
+
+    &__content {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+    }
+
+    &__time-label {
+        color: $color-grey-darker;
+        margin-left: 5.8rem;
     }
 
     &__author-name {
@@ -251,6 +260,21 @@
         padding-right: .5rem;
     }
     
+}
+
+.more_comments {
+    // display: none;
+    color: $color3;
+    cursor: pointer;
+    border: none;
+    border-top: 1px solid rgba($color-grey-darkest,.1);
+    background-color: rgba(204, 204, 204, 0.3);
+    padding: 1rem;
+    text-align: left;
+
+    &:focus {
+        outline: none;
+    }
 }
 
 .js--liked {

@@ -52,17 +52,16 @@ $(document).ready(function(){
                 let post_id = $(hidden_textarea).closest(".post-entry").attr("data-pid");
 
                 //send an AJAX request to save the new comment
-                console.log("to send: " + the_comment + " - " + post_id);
-                
-                $.post("inc/ajax/fetch-comment-ajax.php",{post_id:post_id,the_comment:the_comment})
+                $.post("inc/ajax/fetch-comment-ajax.php",{post_id:post_id,the_comment:the_comment, operation:'insert'})
                     .done(function(result){
                         if ( result == "" ) {
                             console.log("No Comment");
                         }
                         else {
-                            console.log(result);
-                            // $(this_input).closest(".post-entry").append(result);
-                            $(result).insertBefore($(this_input).closest(".post-comment__form"));
+                            // console.log(result);
+                            $(result).insertAfter($(this_input).closest(".post-entry").find("[class*='js--pc']").last());
+                            
+                            // $(result).insertBefore($(this_input).closest(".post-comment__form"));
                             //clear the input textbox
                             $(this_input).text("");
                             $(this_input).blur();
@@ -73,6 +72,31 @@ $(document).ready(function(){
             }
             
         }
+    });
+
+    $(document).on("click", ".js--more_comments", function(event) {
+        // console.log($(this).attr("data-last-index"));
+        let more_comments_btn = event.target;
+        let post_id = $(this).closest(".post-entry").attr("data-pid");
+        // console.log("post id: " + post_id);
+        let the_next_start = $(event.target).attr('data-start');
+        // let start = 0;
+        let limit = 4;
+        $.post("inc/ajax/fetch-comment-ajax.php",{post_id:post_id,start:the_next_start, limit:limit, operation:'fetch'})
+            .done(function(result){
+                if ( result == "" ) {
+                    // console.log("No Comment");
+                    $(more_comments_btn).remove();
+                }
+                else {
+                    // console.log(more_comments_btn);
+                    // console.log(result);
+                    // $(this_input).closest(".post-entry").append(result);
+                    $(result).insertBefore($(more_comments_btn));
+                    $(more_comments_btn).remove();
+                }
+
+            });
     });
 
     $(document).on('keydown','.js--post-comment__input',function(event) {
@@ -99,13 +123,13 @@ $(document).ready(function(){
         let theButton = event.target;
         //get the encrypted post_id value and remove the trailing "=="
         let post_id = $(theButton).closest(".post-entry").attr("data-pid");
-        let targetForm = `.js--pcf${post_id}`;
+        let targetForm = `.js--comfrm${post_id}`;
         targetForm = targetForm.replace("==","");
 
         //toggle the comment_form and comment posts of the selected post
         if ( $(targetForm).css("display") == "none" ) {
             $(targetForm).css("display","flex");
-            $(targetForm).closest(".post-entry").find(".post-comment__entry").css("display", "flex");
+            // $(targetForm).closest(".post-entry").find(".post-comment__entry").css("display", "flex");
             
             //set the cursor inside the textbox
             $(targetForm).find(".js--post-comment__input").focus();

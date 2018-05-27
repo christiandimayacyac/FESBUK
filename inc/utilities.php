@@ -97,6 +97,52 @@
 		return $encoded_string;
 	}
 
+	function getPostTimeInterval($date_time_diff) {
+		switch (true) {
+			case $date_time_diff->y == 1:
+				$time_label = " a year ago";
+				break;
+			case $date_time_diff->y > 1:
+				$time_label = "$date_time_diff->y years ago";
+				break;
+			case $date_time_diff->m == 1:
+				$time_label = " a month ago";
+				break;
+			case $date_time_diff->m > 1:
+				$time_label = "$date_time_diff->m months ago";
+				break;
+			case $date_time_diff->d == 1:
+				$time_label = " a day ago";
+				break;
+			case $date_time_diff->d > 1:
+				$time_label = "$date_time_diff->d days ago";
+				break;
+			case $date_time_diff->h == 1:
+				$time_label = " an hour ago";
+				break;
+			case $date_time_diff->h > 1:
+				$time_label = "$date_time_diff->h hours ago";
+				break;
+			case $date_time_diff->i == 1:
+				$time_label = " a minute ago";
+				break;
+			case $date_time_diff->i > 1:
+				$time_label = "$date_time_diff->i  minutes ago";
+				break;
+			case $date_time_diff->s == 1:
+				$time_label = " a second ago";
+				break;
+			case $date_time_diff->s > 1:
+				$time_label = " $date_time_diff->s seconds ago";
+				break;
+			default:
+				$time_label = " just now";
+				break;
+		}
+
+		return $time_label;
+	}
+
 	//checks if the save cookie named: "rememberFesbuk" is valid
     function isCookieValid($con){
 		
