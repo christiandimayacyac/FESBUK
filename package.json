@@ -20,6 +20,6 @@
     "node-sass": "^4.9.0"
   },
   "dependencies": {
-    "npm": "^6.0.1"
+    "npm": "^6.1.0"
   }
 }

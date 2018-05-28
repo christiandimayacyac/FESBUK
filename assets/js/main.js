@@ -29,12 +29,91 @@ $(document).ready(function(){
     $(document).on("click", ".post-header__options-btn", function(event) {
         event.preventDefault();
         // alert("options clicked");
-        $("<ul class='post-header__options-menu'><li class='post-header__options-item'>Edit Post</li><li class='post-header__options-item'>Delete Post</li></ul>").insertAfter(event.target)
+
+        //check if options menu exists in the DOM; insert if not otherwise display it
+        if ( $(this).parent().find(".js--post-header__options-menu").text() == "" ) {
+            $("<ul class='post-header__options-menu js--post-header__options-menu'><li class='post-header__options-item js--post-header__options-item'>Edit Post</li><li class='post-header__options-item js--post-header__options-item'>Delete Post</li></ul>").insertAfter(event.target)
+        }
+        else{
+            $(this).parent().find(".js--post-header__options-menu").show()
+        } 
     });
 
-    //post-header__options-btn EventListener
-    $(document).on("focusout", ".post-header__options-btn", function(event){
-        $(this).next(".post-header__options-menu").hide();
+    //Post Options Button Item EventListener - Edit / Delete
+    $(document).on("click", ".js--post-header__options-item", function(event) {
+        event.preventDefault();
+        if ( $(this).text() == "Edit Post" ) {
+            // console.log("Editing Post");
+            // $(this).closest(".post-content").find(".js--post-body").attr("contenteditable","true");
+            let post_body =  $(this).closest(".post-entry").find(".js--post-body");
+            $(post_body).hide();
+            let textarea_html = "<div class='post-edit__container js--post-edit__container'><textarea class='post-edit__textarea js--post-edit__textarea js--auto-expand' rows='1' data-min-rows='1' >" + $(post_body).text() + "</textarea><div class='post-edit__buttons'><button class='post-edit__cancel js--post-edit__cancel'>Cancel</button><button class='post-edit__done js--post-edit__done'>Done Editing</button</div></div>";
+            $(textarea_html).insertAfter($(this).closest(".post-header"));
+
+        }
+        else{
+            $(this).closest(".post-entry").find(".js--post-body").show();
+        }
+        // console.log($(this).text());
+    });
+
+    //Post Edit Buttons EventListener -  Cancel / Done Editing
+    $(document).on("click", ".js--post-edit__cancel", function(){
+        // console.log("Discarding changes");
+        $(this).closest(".post-entry").find(".js--post-body").show();
+        $(this).closest(".js--post-edit__container").remove();
+        
+
+    }); 
+
+    $(document).on("click", ".js--post-edit__done", function(){
+        // console.log("Saving changes");
+        let time_label = $(this).closest(".post-entry").find(".post-header__date-posted");
+        let new_content = $(this).closest(".post-content").find(".js--post-edit__textarea").val();
+        
+        $(this).closest(".post-content").find(".js--post-body").text(new_content).show();
+
+        //update post in the database using AJAX
+        let post_id = $(this).closest(".post-entry").attr("data-pid");
+        let user_id = $(this ).closest(".post-entry").attr("data-uid");
+        
+        // $(done_button).closest(".post-entry").find(".post-header__date-posted").text("edited just now");
+        // console.log("user_id:" + user_id);
+        // console.log("post_id:" + post_id);
+        //update the posts using AJAX
+        $.post("inc/ajax/posts-ajax.php",{user_id:user_id, post_id:post_id, new_content:new_content, operation:'edit'})
+            .done(function(result){
+                
+                console.log(result);
+                if ( result != "" ) {
+                    $(time_label).text("edited just now");
+
+                }
+            });
+            $(this).closest(".post-content").find(".js--post-edit__container").remove();
+    }); 
+    
+
+    //post-header__options-btn EventListener - hides the options menu on mouseleave
+    $(document).on("mouseleave", ".js--post-header__options-menu", function(event){
+        event.preventDefault();
+        $(this).hide();
+    });
+
+
+    //Make the textarea of the Post Edit auto expand vertically
+    $(document)
+        .on('focus.js--auto-expand', 'textarea.js--auto-expand', function(){
+            var savedValue = this.value;
+            this.value = '';
+            this.baseScrollHeight = this.scrollHeight;
+            this.value = savedValue;
+        })
+        .on('input.js--auto-expand', 'textarea.js--auto-expand', function(){
+            var minRows = this.getAttribute('data-min-rows')|0, rows;
+            this.rows = minRows;
+            rows = Math.ceil((this.scrollHeight - this.baseScrollHeight) / 16);
+            this.rows = minRows + rows;
     });
 
     $(document).on('keypress','.js--post-comment__input',function(event) {
@@ -255,7 +334,7 @@ function submitPost(event) {
 
     // console.log("to send: " + post_body + " - " + user_id);
 
-    $.post("inc/ajax/posts-ajax.php",{user_id:user_id, post_body:post_body})
+    $.post("inc/ajax/posts-ajax.php",{user_id:user_id, post_body:post_body, operation:"insert"})
     .done(function(result){
         //check if a post-entry exists; append to it if a post entry exists; otherwise insert before the loading_info div
         if ( document.querySelector(".post-entry") != null ) {

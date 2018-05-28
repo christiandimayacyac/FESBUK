@@ -87,7 +87,8 @@
 
                 //if POST is for user's own wall  craft a POST-ENTRY HTML
                 if ( $recipient == "none" ) {
-                    $posts_html = "<div class='post-entry' data-pid='$post_id'>
+                    $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 0;
+                    $posts_html = "<div class='post-entry' data-pid='$post_id' data-uid='$user_id'>
                                     <div class='post-content'>
                                         <div class='post-header'>
                                             <img src='$profile_pic' class='post-header__img'>
@@ -98,7 +99,7 @@
                                             <button class='post-header__options-btn'>...</buton>
                                         </div>
 
-                                        <p class='post-body'>$post_body</p>
+                                        <p class='post-body js--post-body'>$post_body</p>
                                         <div class='post-footer'>
                                             <button class='post-footer__link js--like'>
                                                 <svg class='post-footer__icon'>
@@ -132,6 +133,7 @@
         }
 
         public function loadPosts($user_id, $limit, $start) {
+            $enc_user_id = $user_id;
             $user_id = getTrimmedDecodedValue(Constant::$userIdEncKey, $user_id);
             if ( $user_id > 0 ) {
                 //SELECT ALL POSTS 
@@ -212,7 +214,7 @@
                     //attached comments for the current post
                     $current_comments = $Comments_Obj->loadComments($trimmed_post_id, $com_start, $com_limit);
 
-                    $posts_html .= "<div class='post-entry' data-pid='$post_id'>
+                    $posts_html .= "<div class='post-entry' data-pid='$post_id' data-uid='$enc_user_id'>
                                         <div class='post-content'>
                                             <div class='post-header'>
                                                 <img src='$profile_pic' class='post-header__img'>
@@ -223,7 +225,7 @@
                                                 <button class='post-header__options-btn'>...</buton>
                                             </div>
 
-                                            <p class='post-body'>$post_body</p>
+                                            <p class='post-body js--post-body'>$post_body</p>
                                             <div class='post-footer'>
                                                 <button class='post-footer__link js--like'>
                                                     $svg_html
@@ -319,7 +321,7 @@
                                                 </div>
                                                 <a href='#' class='post-header__edit-btn'>Edit</a>
                                             </div>
-                                            <p class='post-body'>$post_body</p>
+                                            <p class='post-body js--post-body'>$post_body</p>
                                             <div class='post-footer'>
                                                 <button class='post-footer__link js--like'>
                                                     $svg_html
@@ -341,6 +343,25 @@
                 return $posts_html;
             }
 
+        }
+
+        public function editPost($post_id, $new_content, $user_id) {
+            $author_id = $this->User_Obj->user_id;
+            // $decrypted_user_id = getTrimmedDecodedValue(Constant::$userIdEncKey, $user_id);
+            $decrypted_post_id = getTrimmedDecodedValue(Constant::$postEncKey, $post_id);
+
+            $date_edited = date("Y-m-d H:i:s");
+
+            $sql_update = "UPDATE posts SET post_body = :new_content, date_edited = :date_edited WHERE post_id = :post_id AND post_author = :post_author";
+            $stmt = $this->con->prepare($sql_update);
+            $stmt->execute(array(":new_content"=> $new_content, ":date_edited"=>$date_edited, ":post_id"=>$decrypted_post_id, ":post_author"=>$author_id));
+
+            if ( $stmt->rowCount() == 1 ) {
+                return $date_edited;
+            }
+            else {
+                return "";
+            }
         }
 
 

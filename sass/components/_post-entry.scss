@@ -277,6 +277,62 @@
     }
 }
 
+.post-edit {
+
+    &__container {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        border: 1px solid rgba($color-grey-darker,.4);
+        border-radius: .3rem;
+        margin-top: 1.5rem;
+        text-align: right;
+    }
+
+    &__textarea {
+        border: none;
+        width: 100%;
+        padding: 1rem;
+        font-family: inherit;
+        resize: none;
+    }
+
+    &__buttons {
+        padding: .2rem;
+        background-color: rgba($color2, .1);
+    }
+
+    &__cancel, 
+    &__done {
+        cursor: pointer;
+        font-size: 1.3rem;
+        color: $color-grey-darkest;
+        border: 1px solid rgba($color1, .3);
+        border-radius: .3rem;
+        font-weight: 600;
+        background-color: transparent;
+        padding: .4rem 1rem;
+        margin-left: .4rem;
+        
+        &:hover {
+            background-color: rgba($color2,.2);
+        }
+    }
+
+    &__done {
+        color: $color-white;
+        background-color: $color2;
+
+        &:hover {
+            background-color: rgba($color1,.9);
+        }
+    }
+
+}
+
+
+
+
 .js--liked {
     fill: $color3;
 }

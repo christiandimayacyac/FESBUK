@@ -437,6 +437,45 @@ a:link {
   .more_comments:focus {
     outline: none; }
 
+.post-edit__container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border: 1px solid rgba(102, 102, 102, 0.4);
+  border-radius: .3rem;
+  margin-top: 1.5rem;
+  text-align: right; }
+
+.post-edit__textarea {
+  border: none;
+  width: 100%;
+  padding: 1rem;
+  font-family: inherit;
+  resize: none; }
+
+.post-edit__buttons {
+  padding: .2rem;
+  background-color: rgba(56, 111, 164, 0.1); }
+
+.post-edit__cancel, .post-edit__done {
+  cursor: pointer;
+  font-size: 1.3rem;
+  color: #333;
+  border: 1px solid rgba(19, 60, 85, 0.3);
+  border-radius: .3rem;
+  font-weight: 600;
+  background-color: transparent;
+  padding: .4rem 1rem;
+  margin-left: .4rem; }
+  .post-edit__cancel:hover, .post-edit__done:hover {
+    background-color: rgba(56, 111, 164, 0.2); }
+
+.post-edit__done {
+  color: #fff;
+  background-color: #386fa4; }
+  .post-edit__done:hover {
+    background-color: rgba(19, 60, 85, 0.9); }
+
 .js--liked {
   fill: #59a5d8; }
 
