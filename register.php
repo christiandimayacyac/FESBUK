@@ -12,7 +12,6 @@
     Page::ForceLogin();
 
     // $User = new User($_SESSION['user_id']);
-    var_dump($_COOKIE);
 ?>
 
 <!DOCTYPE html>

@@ -10,6 +10,28 @@
     Page::ForceLogout();
 
 ?>
+<div class="overlay">
+    <div class="modal" data-modal-type="Post Delete">
+        <div class="modal__header">
+            <span class="modal__title">Title</span>    
+            <span class="modal__close">
+                <svg class='modal__close--icon'>
+                    <use xlink:href='assets/img/sprite.svg#icon-cross'></use>
+                 </svg>
+                </span>    
+        </div>
+        <div class="modal__body">
+            Body
+        </div>
+        <div class="modal__footer">
+            <span class="modal__footer-text">Footer</span>    
+            <span class="modal__footer-buttons">
+                <button class="modal__footer-buttons--1">Cancel</button>
+                <button class="modal__footer-buttons--2">Delete</button>
+            </span>    
+        </div>
+    </div>
+</div>
 <div class="container">
     <div class="row">
         <div class="content">

@@ -73,6 +73,8 @@
         width: 8rem;
         height: 5rem;
         box-shadow: 0 0.2rem 0.6rem rgba($color-black,.2);
+        @include unselectable;
+
     }
 
     &__options-item {
@@ -82,6 +84,7 @@
         line-height: 2rem;
         color: $color-grey-darkest;
         padding-left: .5rem;
+        @include unselectable;
 
         &:hover {
             color: $color-white;

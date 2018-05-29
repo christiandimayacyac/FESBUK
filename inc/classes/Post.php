@@ -178,14 +178,24 @@
                     $post_id = getBase64EncodedValue(Constant::$postEncKey, $post_entry['post_id']);
                     $post_body = $post_entry['post_body'];
 
+                    //check if the post is new or edited
+                    $time_label_prefix =  "";
+                    if ( $post_entry['date_posted'] == $post_entry['date_edited'] ) {
+                        $start_date_time = new DateTime($post_entry['date_posted']);
+                    }
+                    else {
+                        $start_date_time = new DateTime($post_entry['date_edited']);
+                        $time_label_prefix =  "edited ";
+                    }
+
                     //calculate time passed after posting
                     $current_date_time = date("Y-m-d H:i:s");
-                    $start_date_time = new DateTime($post_entry['date_posted']);
+                    // $start_date_time = new DateTime($post_entry['date_posted']);
                     $end_date_time = new DateTime($current_date_time);
                     $date_time_diff = $start_date_time->diff($end_date_time);
 
 
-                    $time_label = getPostTimeInterval($date_time_diff);
+                    $time_label = $time_label_prefix . getPostTimeInterval($date_time_diff);
 
                     //check if current_user liked the current post; add "js--liked" class to like button
                     $Like_Obj = new Like($this->con, $post_entry['post_id'], $user_id);
@@ -361,6 +371,25 @@
             }
             else {
                 return "";
+            }
+        }
+
+        public function deletePost($post_id, $user_id) {
+            $author_id = $this->User_Obj->user_id;
+            // $decrypted_user_id = getTrimmedDecodedValue(Constant::$userIdEncKey, $user_id);
+            $decrypted_post_id = getTrimmedDecodedValue(Constant::$postEncKey, $post_id);
+
+            $date_edited = date("Y-m-d H:i:s");
+
+            $sql_update = "DELETE FROM posts WHERE post_id = :post_id AND post_author = :post_author";
+            $stmt = $this->con->prepare($sql_update);
+            $stmt->execute(array(":post_id"=>$decrypted_post_id, ":post_author"=>$author_id));
+
+            if ( $stmt->rowCount() == 1 ) {
+                return true;
+            }
+            else {
+                return false;
             }
         }
 

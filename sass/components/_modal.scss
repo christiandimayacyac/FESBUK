@@ -1,0 +1,92 @@
+.overlay {
+    display: none;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    min-width: 100vw;
+    height: 100vh;
+    background-color: rgba($color-black, .95);
+    color: $color-white;
+    transition: all 2s ease-out;
+    z-index: 100;
+}
+
+.modal {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    margin-top: 10%;
+    min-width: 50rem;
+    height: auto;
+    background-color: $color2;
+    font-size: 1.4rem;
+    border-radius: 3px;
+    overflow: hidden;
+
+    &__close {
+        cursor: pointer;
+
+        &--icon {
+            fill: $color-white;
+            width: 2rem;
+            height: 2rem;
+        }
+    }
+
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: .5rem 1rem;
+    }
+
+    &__title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        letter-spacing: .05rem;
+    }
+
+    &__body {
+        padding: 1rem;
+        color: $color-grey-darkest;
+        background-color: $color-white;
+    }
+
+    &__footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: .5rem 1rem;
+        font-size: 1.2rem;
+        color: $color-grey-darkest;
+        background-color: $color-white;
+        border-top: 1px solid $color-grey-dark;
+    }
+
+    &__footer-buttons {
+        
+        &--1,
+        &--2 {
+            cursor: pointer;
+            font-size: inherit;
+            border: 1px solid rgba($color1,.2);
+            border-radius: 3px;
+            background-color: rgba($color1,.1);
+            padding: .5rem 1rem;
+
+            &:hover {
+                background-color: rgba($color1,.2);
+            }
+        }
+
+        &--2 {
+            color: $color-white;
+            background-color: $color3;
+
+            &:hover {
+                background-color: $color2;
+            }
+        }
+    }
+}

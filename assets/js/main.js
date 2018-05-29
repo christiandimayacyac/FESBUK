@@ -42,49 +42,85 @@ $(document).ready(function(){
     //Post Options Button Item EventListener - Edit / Delete
     $(document).on("click", ".js--post-header__options-item", function(event) {
         event.preventDefault();
-        if ( $(this).text() == "Edit Post" ) {
-            // console.log("Editing Post");
-            // $(this).closest(".post-content").find(".js--post-body").attr("contenteditable","true");
-            let post_body =  $(this).closest(".post-entry").find(".js--post-body");
-            $(post_body).hide();
-            let textarea_html = "<div class='post-edit__container js--post-edit__container'><textarea class='post-edit__textarea js--post-edit__textarea js--auto-expand' rows='1' data-min-rows='1' >" + $(post_body).text() + "</textarea><div class='post-edit__buttons'><button class='post-edit__cancel js--post-edit__cancel'>Cancel</button><button class='post-edit__done js--post-edit__done'>Done Editing</button</div></div>";
-            $(textarea_html).insertAfter($(this).closest(".post-header"));
+        if ( $(this).text() == "Edit Post" ) {            
+            //check if textarea is already displayed; don't redisplay if already in the DOM
+            if ( $(this).closest(".post-content").find(".js--post-edit__container").length < 1 ) {
+                let post_body =  $(this).closest(".post-entry").find(".js--post-body");
+                $(post_body).hide();
+                let textarea_html = "<div class='post-edit__container js--post-edit__container'><textarea class='post-edit__textarea js--post-edit__textarea js--auto-expand' rows='1' data-min-rows='1' >" + $(post_body).text() + "</textarea><div class='post-edit__buttons'><button class='post-edit__cancel js--post-edit__cancel'>Cancel</button><button class='post-edit__done js--post-edit__done'>Done Editing</button</div></div>";
+                $(textarea_html).insertAfter($(this).closest(".post-header"));
+            }
+            else {
+                return;
+            }
 
         }
+        //show Modal Window for POST DELETE
         else{
+            //get Post ID to be used in the modal window attribute
+            let post_id = $(this).closest(".post-entry").attr("data-pid");
+            let user_id = $(this).closest(".post-entry").attr("data-uid");
+
             $(this).closest(".post-entry").find(".js--post-body").show();
+            $(".overlay").css("display","flex");
+            $(".overlay .modal__title").text("Delete Post");
+            $(".overlay .modal__body").text("Are you sure you want to delete this post?");
+            $(".overlay .modal__footer-text").text("");
+            $(".overlay .modal").attr({"data-pid": post_id, "data-uid": user_id});
         }
-        // console.log($(this).text());
+       
     });
+
+    //Modal EventListener - [Cancel] / Delete
+    $(document).on("click", ".modal__footer-buttons--1", function(){
+        let modal_type = $(".modal").attr("data-modal-type");
+        if ( $(this).text() == "Cancel" ) {
+            $(".overlay .modal").removeAttr("data-pid");
+            $(".overlay").css("display","none");
+        } 
+    });
+
+    //Modal EventListener - Cancel / [Delete]
+    $(document).on("click", ".modal__footer-buttons--2", function(){
+        let modal_type = $(".modal").attr("data-modal-type");
+        if ( $(this).text() == "Delete" ) {
+            $(".overlay").css("display","none");
+
+            //Delete Post in the Database through AJAX
+            let post_id = $(".modal").attr("data-pid");
+            let user_id = $(".modal").attr("data-uid");
+            $.post("inc/ajax/posts-ajax.php",{post_id:post_id, user_id: user_id, operation:"delete"})
+                .done(function(result){
+                    if ( result ) {
+                        // $("[data-pid='" + post_id + "']").hide(); // for ES5 and earlier versions
+                        $(`[data-pid="${post_id}"]`).hide();
+                    }
+                });
+        } 
+    });
+
+
 
     //Post Edit Buttons EventListener -  Cancel / Done Editing
     $(document).on("click", ".js--post-edit__cancel", function(){
-        // console.log("Discarding changes");
         $(this).closest(".post-entry").find(".js--post-body").show();
         $(this).closest(".js--post-edit__container").remove();
-        
-
     }); 
 
     $(document).on("click", ".js--post-edit__done", function(){
-        // console.log("Saving changes");
         let time_label = $(this).closest(".post-entry").find(".post-header__date-posted");
         let new_content = $(this).closest(".post-content").find(".js--post-edit__textarea").val();
-        
+
         $(this).closest(".post-content").find(".js--post-body").text(new_content).show();
 
         //update post in the database using AJAX
         let post_id = $(this).closest(".post-entry").attr("data-pid");
         let user_id = $(this ).closest(".post-entry").attr("data-uid");
         
-        // $(done_button).closest(".post-entry").find(".post-header__date-posted").text("edited just now");
-        // console.log("user_id:" + user_id);
-        // console.log("post_id:" + post_id);
         //update the posts using AJAX
         $.post("inc/ajax/posts-ajax.php",{user_id:user_id, post_id:post_id, new_content:new_content, operation:'edit'})
             .done(function(result){
                 
-                console.log(result);
                 if ( result != "" ) {
                     $(time_label).text("edited just now");
 
@@ -134,10 +170,9 @@ $(document).ready(function(){
                 $.post("inc/ajax/fetch-comment-ajax.php",{post_id:post_id,the_comment:the_comment, operation:'insert'})
                     .done(function(result){
                         if ( result == "" ) {
-                            console.log("No Comment");
+                            // console.log("No Comment");
                         }
                         else {
-                            // console.log(result);
                             $(result).insertAfter($(this_input).closest(".post-entry").find("[class*='js--pc']").last());
                             
                             // $(result).insertBefore($(this_input).closest(".post-comment__form"));
@@ -154,23 +189,17 @@ $(document).ready(function(){
     });
 
     $(document).on("click", ".js--more_comments", function(event) {
-        // console.log($(this).attr("data-last-index"));
         let more_comments_btn = event.target;
         let post_id = $(this).closest(".post-entry").attr("data-pid");
-        // console.log("post id: " + post_id);
         let the_next_start = $(event.target).attr('data-start');
-        // let start = 0;
+
         let limit = 4;
         $.post("inc/ajax/fetch-comment-ajax.php",{post_id:post_id,start:the_next_start, limit:limit, operation:'fetch'})
             .done(function(result){
                 if ( result == "" ) {
-                    // console.log("No Comment");
                     $(more_comments_btn).remove();
                 }
                 else {
-                    // console.log(more_comments_btn);
-                    // console.log(result);
-                    // $(this_input).closest(".post-entry").append(result);
                     $(result).insertBefore($(more_comments_btn));
                     $(more_comments_btn).remove();
                 }
@@ -231,7 +260,6 @@ $(document).ready(function(){
 
     //function that sends ajax request to fetch-posts-ajax.php to pull posts from the database
     function loadUserPosts() {
-        // console.log("loading user posts");
         $.post("inc/ajax/fetch-posts-ajax.php",{start:start, limit:limit})
             .done(function(result){
                 if ( result == "" ) {
@@ -239,7 +267,6 @@ $(document).ready(function(){
                     $(".loading__info").hide();
                 }
                 else {
-                    // console.log(result);
                     ready_to_fetch = true;
                     $(".wall__posts").append(result);
                 }
@@ -291,7 +318,6 @@ $(document).on("click", ".js--like", () =>{
         });
     }
     else {
-        // console.log("unliked:" + $post_id);
         $.post("inc/ajax/likes-ajax.php",{like_flag: true, post_id:$post_id, operation:"delete"})
             .done(function(result){
                 if (result) {
@@ -331,8 +357,6 @@ function updatePostLike($el, $type, $operation) {
 function submitPost(event) {
     let post_body = $(".js--wall__textarea").val();
     let user_id = $(".js--wall__input").val();
-
-    // console.log("to send: " + post_body + " - " + user_id);
 
     $.post("inc/ajax/posts-ajax.php",{user_id:user_id, post_body:post_body, operation:"insert"})
     .done(function(result){
